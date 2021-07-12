@@ -32,7 +32,7 @@ foreach ($eqLogics as $eqLogic) {
 	
 			$namesearch = $eqLogic->getConfiguration('modelName');
                       if (in_array($namesearch, array("2N Access Unit M", "2n Helios IP Vario", "2N IP Solo", "2N IP Verso"))){                         
-                           echo '<img class="lazy" src="plugins/inter2N/core/config/devices/' .$eqLogic->getConfiguration('modelName'). '.jpeg"/>';
+                           echo '<img class="lazy" src="plugins/inter2N/core/config/devices/' .$namesearch. '.jpeg"/>';
 			} else {
 			   echo '<img src="' . $plugin->getPathImgIcon() . '" />';
                     
