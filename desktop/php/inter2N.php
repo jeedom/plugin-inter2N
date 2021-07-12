@@ -29,17 +29,15 @@ $eqLogics = eqLogic::byType($plugin->getId());
 foreach ($eqLogics as $eqLogic) {
 	$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
 	echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
-	/* if ($eqLogic->getConfiguration('device') != ""){*/
-					if ($eqLogic->getConfiguration('modelName') != "") {	
-                        
-                        echo '<img class="lazy" src="plugins/inter2N/core/config/devices/' .$eqLogic->getConfiguration('modelName'). '.jpeg"/>';
-					} else {
-						echo '<img src="' . $plugin->getPathImgIcon() . '" />';
+	
+			$namesearch = $eqLogic->getConfiguration('modelName');
+                      if (in_array($namesearch, array("2N Access Unit M", "2n Helios IP Vario", "2N IP Solo", "2N IP Verso"))){                         
+                           echo '<img class="lazy" src="plugins/inter2N/core/config/devices/' .$namesearch. '.jpeg"/>';
+			} else {
+			   echo '<img src="' . $plugin->getPathImgIcon() . '" />';
                     
-					}
-			/*	}else{
-					echo '<img src="' . $plugin->getPathImgIcon() . '" />';
-				}*/
+			 }
+	
 	echo '<br>';
 	echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
 	echo '</div>';
