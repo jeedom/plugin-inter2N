@@ -1,0 +1,142 @@
+<div class="eqLogic eqLogic-widget allowResize #eqLogic_class# #class#" data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width:#width#;height:#height#;">
+ <link rel="stylesheet" href="plugins/Inter2N/core/template/css/Inter2N.template.css"/>
+    <div class="text-center widget-name">
+        <span class="warning" title="#alert_name#">
+             <i class='#alert_icon#'></i>
+        </span>
+        <span class="cmd refresh pull-right cursor" data-cmd_id="#refresh_id#">
+             <i class="fas fa-sync"></i>
+         </span>
+         <span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
+              <a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
+    </div>
+
+    <div class="inter2N_template">
+      
+ 
+         <div id="containerleft">
+                 <div class="classMvt">
+                        <div class="#Bruit_Detecte#"><strong>Bruit Detecté</strong></div>
+                        <div class="2NCmdBruit"><span class="2NCard">#Bruit_Detecte#</span></div>
+                 </div>
+                 <div class="classCard">
+                        <div class="#Lecteur_carte_id#"><strong>Numero de carte</strong></div>
+                        <div class="2NCmdCard"><span class="2NCard">#Lecteur_carte#</span></div>
+                  </div> 
+                 <div class="classOpen">  
+                        <div class="#ouverture_non_autorisee_id#"><strong>Ouverture non autorisee</strong></div>
+                        <div class="2NCmdOpen"><span class="2NCard">#ouverture_non_autorisee#</span></div>
+                 </div> 
+                 <div class="classToolong"> 
+                        <div class="#Porte_ouverte_trop_longtemps_id#"><strong>Porte Ouverte trop longtemps</strong></div>
+                        <div class="2NCmdOpenLong"><span class="2NCard">#Porte_ouverte_trop_longtemps#</span></div>
+                 </div>  
+         </div>
+      
+      
+
+      
+          <div id="containerright">
+              <div class="classMright" id="vincula">
+                  <div class="2NMouvementLeft"> 
+                    <span class="#Mouvement_id#"><strong>Mouvement</strong></span>
+                   </div>
+                  <div class="NMouvementRight">
+                    <span class="2NMouvementValue" id="spanmv"><i class="fas jeedom-mouvement" id="mvtid"></i></span>
+                    </div>
+              </div>
+              <div class="classStright" id="idswitches">
+                  <div class="NSwitchleft">
+                    <span class="#SWITon_id#"><strong>Switch_1</strong></span>  
+                    <span class="#_id#"><strong>Switch_2</strong></span> 
+                  </div> 
+                <div class="NSwitchright">
+                           <span id="testtest" style="cursor:pointer;"></span>
+                           <span id="testtest2" style="cursor:pointer;"></span>            
+                </div>
+             </div>
+        
+          </div>
+    </div>
+  
+
+<script>
+  
+  
+  var yop = '#Mouvement#';
+  var switch1 = '#SWITCH_1#';
+  var switch2 = '#SWITCH_2#';
+  
+
+  
+  if (yop == 0) {
+    /* $("#mvtid").show();*/
+    $("#spanmv i").removeClass("fa-check").addClass("fas jeedom-mouvement");
+    
+  } 
+  else{
+    /* $("#mvtid").hide(); 
+     $("#mvtin").show(); */
+    $("#spanmv i").removeClass("fas jeedom-mouvement").addClass("fa-check");
+ 
+  }
+  
+  
+ /*  if (switch1 == 0) {   
+         $("#ploup i").removeClass("fas fa-circle").addClass("fas fa-times-circle");
+
+  } 
+  else{   
+         $("#ploup i").removeClass("fas fa-times-circle").addClass("fas fa-circle");    
+  }
+ */
+  
+function test(){
+     
+   if (switch1 == 0) {   
+      /*  $("#ploup i").removeClass("jeedom-lock-ouvert").addClass("jeedom-lock-ferme");*/
+     $("#testtest").show();
+    $("#testtest2").hide();
+  } 
+  else{   
+      /*   $("#ploup i").removeClass("jeedom-lock-ferme").addClass("jeedom-lock-ouvert"); */
+     $("#testtest").hide();
+     $("#testtest2").show();
+  }
+  
+  
+}
+  
+  
+  
+test();  
+  
+$("#testtest").on('click', function () {
+  jeedom.cmd.execute({id: '#Switch On_1_id#'});
+   
+ 
+});
+  
+  
+  
+$("#ploup2").on('click', function () {
+  jeedom.cmd.execute({id: '#Switch On_2_id#'});
+  /* test(2);*/
+ 
+});
+  
+  
+
+
+  
+  
+  
+  
+  
+</script>
+  
+  
+  
+
+  
+</div>

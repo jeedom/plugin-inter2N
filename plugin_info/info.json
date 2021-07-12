@@ -1,0 +1,20 @@
+{
+	"id" : "inter2N",
+	"name" : "inter2N",
+	"description" : "Plugin pour gérer les interphones inter2N",
+	"licence" : "AGPL",
+	"author" : "Jeedom SAS",
+	"require" : "4.1.22",
+	"category" : "communication",
+	"hasDependency" : false,
+	"hasOwnDeamon" : true,
+	"maxDependancyInstallTime" : 0,
+	"changelog" : "https://jeedom.github.io/inter2N/#language#/changelog",
+	"documentation" : "https://jeedom.github.io/inter2N/#language#/",
+	"link" : {
+		"forum":"Lien vers le forum",
+		"video" : "Lien vers une video"
+	},
+	"language" : ["fr_FR","en_US"],
+	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile"]
+}

@@ -1,0 +1,106 @@
+@font-face {
+	font-family: "Nasalization";
+	/*src:  url("fonts/digital-7.ttf") format("opentype");*/
+    src:  url("fonts/roboto.ttf") format("opentype");
+}
+
+.inter2N_template {
+	height:90%;
+    width:100%;
+  /*  background-image:url("images/cadre2.png");
+    background-size: cover;*/
+	background-repeat: no-repeat;
+	/*background-position: center 0%;*/
+	font-family: "roboto";
+	color: black!important;
+	/*background-size: 100% 100%;*/
+	display: flex;
+	/*flex-direction: column;*/
+	justify-content: center;
+    flex-grow:1;
+}
+
+#containerleft {
+	height:100%;
+    width:50%;
+	font-family: "roboto";
+    text-align: center;
+	color: black!important;
+	background-size: 90% 95%;
+    align-items:center;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+ 
+}
+
+#containerright {
+	height:100%;
+    width:50%;
+	font-family: "roboto";
+	color: black!important;
+	background-size: 90% 95%;
+    align-items:center;
+	display: flex;
+	flex-direction: column;
+	 justify-content: space-evenly;
+     border-left: solid;
+ 
+}
+
+.classMright, .classStright {
+  
+   display:flex;
+   width:100%;
+   height:100px;
+   align-items:center;
+   justify-content:space-evenly;
+ 
+}
+
+.classMright i{
+  
+Font-size: 2em;
+
+}
+
+.NSwitchleft {
+  
+  display:flex;
+  flex-direction: column;
+
+}
+
+.NSwitchright {
+  
+  display:flex;
+  flex-direction: column;
+  Font-size: 1.5em;
+
+}
+
+/*.classMvt, .classCard, .classOpen, .classToolong {
+    
+    display:flex;
+    width:100%;
+    justify-content:space-evenly;
+
+}*/
+
+
+#testtest {
+ height: 50px;
+ width: 100px;
+ background-image:url("images/switchon.jpg");
+ background-repeat: no-repeat;
+
+}
+
+
+#testtest2 {
+ height: 50px;
+ width: 100px;
+ background-image:url("images/switchoff.jpg");
+ background-repeat: no-repeat;
+
+}
