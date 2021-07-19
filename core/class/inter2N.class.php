@@ -35,8 +35,7 @@ class inter2N extends eqLogic {
           log::add('inter2N', 'debug', 'MODEL NAME ' . $modelrespons);
        }else{      
            return "Modèle inconnu";
-       }
-   
+       } 
   }
   
   
@@ -108,6 +107,7 @@ class inter2N extends eqLogic {
             $startRequest =  $protocole . '://' . $username .':'. $password .'@'. $ip;
         }
         $http = new com_http( $startRequest . $string);
+      
 
         if(empty($startRequest)){
         } else {
@@ -180,6 +180,7 @@ class inter2N extends eqLogic {
                       }
                 }
    }*/
+ 
   
   
      public static function refreshDash($eqLogic){   
@@ -402,7 +403,127 @@ class inter2N extends eqLogic {
         return $arrayIdSwitches;
     }
   
+  
+      public function getXmlConfig($string){
+            $username = $this->getConfiguration('username');
+            $password = $this->getConfiguration('password');
+            $protocole = $this->getConfiguration('protocole');
+            $ip = $this->getConfiguration('ip');
 
+        if(empty($username) ||  empty($password) || empty($ip) ){
+            return;
+        } else {
+            $startRequest = $protocole . '://' . $username .':'. $password .'@'. $ip;
+        }
+        $http = new com_http( $startRequest . $string);
+
+        if(empty($startRequest)){
+        } else {
+            $request = $http->exec();
+            return $request;
+        }
+    
+    }
+  
+  
+   public function resquest_put($string, $xml){
+    
+            $username = $this->getConfiguration('username');
+            $password = $this->getConfiguration('password');
+            $protocole = $this->getConfiguration('protocole');
+            $ip = $this->getConfiguration('ip');
+            $choicesignal = $this->getConfiguration('sonnerietype');
+   
+            $test = '';
+            if($choicesignal == 'simplesignal'){ $test = 1; };
+            if($choicesignal == 'bothsignal'){ $test = 2; };
+            if($choicesignal == 'nonesignal'){ $test = 0; };
+         
+            $xmlB = new SimpleXMLElement($xml);        
+            $xmlB->AccessControl->AccessPoint[0]->Signalization = $test;
+            $xmlB->AccessControl->AccessPoint[1]->Signalization = $test;
+            $yop = $xmlB->asXML();
+
+        if(empty($username) ||  empty($password) || empty($ip) ){
+            return;
+        } else {
+            $startRequest =  $protocole . '://' . $username .':'. $password .'@'. $ip;
+        }
+        $http = new com_http( $startRequest . $string);
+        $array_req = array('blob-cfg' => $yop);
+        $http->setPut($array_req);
+
+        if(empty($startRequest)){
+        } else {
+            $request = $http->exec();
+            $respons = json_decode($request, true);
+            log::add('inter2N', 'debug', $respons);
+            return $respons;
+        }
+    }
+  
+  
+  
+  
+  
+     public function create_mastercode($array, $stringForConfig, $xml){
+            $username = $this->getConfiguration('username');
+            $password = $this->getConfiguration('password');
+            $protocole = $this->getConfiguration('protocole');
+            $ip = $this->getConfiguration('ip');
+       
+            $xmlB = new SimpleXMLElement($xml); 
+       
+            if($array[0] != ''){
+              $xmlB->Switches->Switch[0]->Code[0]->Code = $array[0];
+            }
+       
+            if($array[1] != ''){
+              $xmlB->Switches->Switch[1]->Code[0]->Code = $array[1];
+            }
+       
+            if($array[2] != ''){
+              $xmlB->Switches->Switch[2]->Code[0]->Code = $array[2];
+            }
+       
+            if($array[3] != ''){
+              $xmlB->Switches->Switch[3]->Code[0]->Code = $array[3];
+            }
+            
+         /*   $xmlB->Switches->Switch[1]->Code[0]->Code = $array[1];
+            $xmlB->Switches->Switch[2]->Code[0]->Code = $array[2];
+            $xmlB->Switches->Switch[3]->Code[0]->Code = $array[3];*/
+            $yop = $xmlB->asXML();
+
+         if(empty($username) ||  empty($password) || empty($ip) ){
+            return;
+        } else {
+            $startRequest =  $protocole . '://' . $username .':'. $password .'@'. $ip;
+        }
+        $http = new com_http( $startRequest . $stringForConfig);
+        $array_req = array('blob-cfg' => $yop);
+        $http->setPut($array_req);
+
+        if(empty($startRequest)){
+        } else {
+            $request = $http->exec();
+            $respons = json_decode($request, true);
+            log::add('inter2N', 'debug', $respons);
+            return $respons;
+        }
+    }
+
+  
+  
+  
+ public function getConfig($stringForConfig, $xml){
+
+        $rep_requete =  $this->resquest_put($stringForConfig, $xml);
+        log::add('inter2N', 'debug', 'RESULTREQUETE ' . json_encode($rep_requete));
+
+
+ }
+  
 
     public function action($action, $option, $exception){
         
@@ -498,7 +619,7 @@ class inter2N extends eqLogic {
         
         public function preInsert() {
               $this->setDisplay('height','350px');
-              $this->setDisplay('width', '560px');
+              $this->setDisplay('width', '540px');
               $this->setIsEnable(1);
               $this->setIsVisible(1);
         }
@@ -512,9 +633,35 @@ class inter2N extends eqLogic {
         }
         
         public function postSave() {
-
+          
+            $stringForConfig = "/api/config";
             $this->createCamera();
             $this->crea_cmd();
+            $xml = $this->getXmlConfig($stringForConfig);
+            $this->getConfig($stringForConfig, $xml);
+            $mastercode1 = intval($this->getConfiguration('mastercodeSwitch1'));
+            if(!is_int($mastercode1) ){ message::add('inter2N', 'Le mastercode 1 doit etre de type numerique'); };
+            $mastercode2 = intval($this->getConfiguration('mastercodeSwitch2'));
+          if(!is_int($mastercode2) ){ message::add('inter2N', 'Le mastercode 2 doit etre de type numerique'); };
+            $mastercode3 = intval($this->getConfiguration('mastercodeSwitch3'));
+          if(!is_int($mastercode3) ){ message::add('inter2N', 'Le mastercode 3 doit etre de type numerique'); };
+            $mastercode4 = intval($this->getConfiguration('mastercodeSwitch4'));
+          if(!is_int($mastercode4) ){ message::add('inter2N', 'Le mastercode 4 doit etre de type numerique'); };
+            
+         
+            $array_mastercodes = array();
+            array_push($array_mastercodes, $mastercode1);
+            array_push($array_mastercodes, $mastercode2);
+            array_push($array_mastercodes, $mastercode3);
+            array_push($array_mastercodes, $mastercode4);
+          
+    
+            $rep_requete = $this->create_mastercode($array_mastercodes, $stringForConfig, $xml);
+            log::add('inter2N', 'debug', 'RESULTREQUETEMASTERCODE1 ' . json_encode($rep_requete));
+          
+    
+         
+          
 
         }
   
@@ -627,19 +774,19 @@ class inter2N extends eqLogic {
                     array_push($arrayFunctions, $activeFunctions);
                     foreach( $arrayFunctions as $function){
                         //Cmd info binary
-                      if($this->getConfiguration('fingerprintselect') == 'yes'){                        
+                                          
                         $namesInfoBinary = ['motionDetection;Mouvement', 'noiseDetection;Bruit_Detecte', 'doorSensor;Arrachement_Interphone', 'doorSensor;Porte_ouverte_trop_longtemps', 'doorSensor;ouverture_non_autorisee', 'doorSensor;Etat_porte'];
-                            $namesInfoString = ['keypad;dernier_bouton', 'keypad;Code_entree','cardReader;Lecteur_carte','fpReader;empreinte','phone;Bluetooth_Tel_Mobile', 'phone;Appel'];
-                      }
+                        $namesInfoString = ['keypad;dernier_bouton', 'keypad;Code_entree','cardReader;Lecteur_carte','fpReader;empreinte','phone;Bluetooth_Tel_Mobile', 'phone;Appel'];
+                     
                        if($this->getConfiguration('fingerprintselect') == 'no'){ 
-                       $namesInfoBinary = ['motionDetection;Mouvement', 'noiseDetection;Bruit_Detecte', 'doorSensor;Arrachement_Interphone', 'doorSensor;Porte_ouverte_trop_longtemps', 'doorSensor;ouverture_non_autorisee', 'doorSensor;Etat_porte'];
-                          $namesInfoString = ['keypad;Dernier_bouton_appuye', 'keypad;Code_entree','cardReader;Lecteur_carte','phone;Bluetooth_Tel_Mobile','phone;Appel'];
+                           $elementa = 'fpReader;empreinte';                       
+                           unset($namesInfoString[array_search($elementa, $namesInfoString)]);
                        }
-                      if($this->getConfiguration('tamperswitchprot') == 'no'){   
-                        $element = 'doorSensor;Arrachement_Interphone';                       
-                        unset($namesInfoBinary[array_search($element, $namesInfoBinary)]);
+                       if($this->getConfiguration('tamperswitchprot') == 'no'){   
+                           $elementb = 'doorSensor;Arrachement_Interphone';                       
+                           unset($namesInfoBinary[array_search($elementb, $namesInfoBinary)]);
 
-                      }
+                       }
 
                       /*  $numorder = 0;*/
                         foreach($namesInfoBinary as $nameInfoBinary){
@@ -756,7 +903,7 @@ class inter2N extends eqLogic {
             }
           
 
-          switch ($this->getLogicalId()) {
+            switch ($this->getLogicalId()) {
                 case 'refresh':
                     inter2N::refreshDash($eqLogic);                  
                     break;

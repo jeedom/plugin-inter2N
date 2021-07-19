@@ -30,14 +30,13 @@ foreach ($eqLogics as $eqLogic) {
 	$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
 	echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
 	
-			$namesearch = $eqLogic->getConfiguration('modelName');
-                      if (in_array($namesearch, array("2N Access Unit M", "2n Helios IP Vario", "2N IP Solo", "2N IP Verso"))){                         
-                           echo '<img class="lazy" src="plugins/inter2N/core/config/devices/' .$namesearch. '.jpeg"/>';
-			} else {
-			   echo '<img src="' . $plugin->getPathImgIcon() . '" />';
-                    
-			 }
-	
+                      $namesearch = $eqLogic->getConfiguration('modelName');
+                      if (in_array($namesearch, array("2N Access Unit M", "2n Helios IP Vario", "2N IP Solo", "2N IP Verso"))){                      
+                        echo '<img class="lazy" src="plugins/inter2N/core/config/devices/' .$namesearch. '.jpeg"/>';
+					} else {
+						echo '<img src="' . $plugin->getPathImgIcon() . '" />';                   
+					}
+
 	echo '<br>';
 	echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
 	echo '</div>';
@@ -127,6 +126,39 @@ foreach ($eqLogics as $eqLogic) {
                 <input type="password" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="password" placeholder="mot de passe"/>
             </div>
         </div>
+              <div class="form-group">
+            <label class="col-sm-3 control-label">{{Code SuperUtilisateur Switch1}}</label>
+            <div class="col-sm-3">
+                <input type="password" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch1" placeholder="Tapez un code pour avoir tous les droits"/>
+            </div>
+        </div>
+           <div class="form-group">
+            <label class="col-sm-3 control-label">{{Code SuperUtilisateur Switch2}}</label>
+            <div class="col-sm-3">
+                <input type="password" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch2" placeholder="Tapez un code pour avoir tous les droits"/>
+            </div>
+        </div>
+           <div class="form-group">
+            <label class="col-sm-3 control-label">{{Code SuperUtilisateur Switch3}}</label>
+            <div class="col-sm-3">
+                <input type="password" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch3" placeholder="Tapez un code pour avoir tous les droits"/>
+            </div>
+        </div>
+           <div class="form-group">
+            <label class="col-sm-3 control-label">{{Code SuperUtilisateur Switch4}}</label>
+            <div class="col-sm-3">
+                <input type="password" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch4" placeholder="Tapez un code pour avoir tous les droits"/>
+            </div>
+        </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
          <div class="form-group">
             <label class="col-sm-3 control-label">{{Module Empreinte Digitale}}</label>
             <div class="col-sm-3">
@@ -163,6 +195,18 @@ foreach ($eqLogics as $eqLogic) {
 			          </div>
                 </div> 
              </div>
+             <div class="form-group">
+            <label class="col-sm-3 control-label">{{Type de sonnerie validation Carte}}</label>
+            <div class="col-sm-3">
+			    <div class="input-group">
+				  <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="sonnerietype" style="width:auto;">
+                       <option value='' ></option>
+					   <option value='simplesignal' > Simple Beep </option>
+					   <option value='bothsignal'> Beep + Son </option>
+                       <option value='nonesignal'> Aucun </option>
+				  </select>
+			    </div>
+           </div> 
 
 </fieldset>
 </form>
