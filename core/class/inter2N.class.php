@@ -490,9 +490,7 @@ class inter2N extends eqLogic {
               $xmlB->Switches->Switch[3]->Code[0]->Code = $array[3];
             }
             
-         /*   $xmlB->Switches->Switch[1]->Code[0]->Code = $array[1];
-            $xmlB->Switches->Switch[2]->Code[0]->Code = $array[2];
-            $xmlB->Switches->Switch[3]->Code[0]->Code = $array[3];*/
+        
             $yop = $xmlB->asXML();
 
          if(empty($username) ||  empty($password) || empty($ip) ){
@@ -809,7 +807,7 @@ class inter2N extends eqLogic {
                                }
                                if($cmd->getName() == 'Etat_porte'){
                                  $cmd->setTemplate('dashboard', 'door');
-                                 $cmd->setValue(0);
+                                 /*$cmd->setValue(0);*/
                                }
                                 $cmd->setType('info');
                                 $cmd->setSubType('binary');
