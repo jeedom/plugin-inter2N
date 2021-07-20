@@ -55,6 +55,12 @@ In the drop-down menus, choose the modules installed or not on your intercom: Ca
 ![config](../images/2nCrea.png)
 
 
+
+You can create directly without going through the interface of your 2N, a code by Switch available according to your device, in Superuser Code. You can also change the type of signal when an invalid card is passed in front of the reader (Simple Beep, Beep + Light, or None).
+
+![config](../images/2nSuperUser.png)
+
+
 Assign a parent and make it visible and active.
 
 If you have a camera on your equipment, a camera object will be created via the Camera plugin; you will have to configure it to make it appear on your dashboard.
