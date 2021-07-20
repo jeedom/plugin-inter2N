@@ -216,7 +216,7 @@ class inter2N extends eqLogic {
             }
             $id = $eqLogic->getConfiguration('idSubs');
         if(empty($id)){
-            log::add('inter2N', 'debug', 'func:switchesStatus err:Id is empty');
+            log::add('inter2N', 'debug', 'ID vide, redemarrez le démon pour l attribution d un ID');
         }else {
             $responsForLog = $eqLogic->logPull($id);
             //Create an array with status of Output
