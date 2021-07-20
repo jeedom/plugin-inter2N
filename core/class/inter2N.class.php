@@ -471,7 +471,24 @@ class inter2N extends eqLogic {
             $password = $this->getConfiguration('password');
             $protocole = $this->getConfiguration('protocole');
             $ip = $this->getConfiguration('ip');
+            $xmlB = new SimpleXMLElement($xml);
+            $i = 0;
+             foreach($array as $switch=>$array_switch){                                         
+                   $len_array_values = count($array_switch);
+                   
+                   for($j=0; $j < $len_array_values; $j++){
+                      if($switch != ''){
+                         $xmlB->Switches->Switch[$i]->Code[$j]->Code = $array_switch[$j];
+                        }
+  
+                   }  
+                   $i++;
+                
+             }                                
+
+            $xml_to_upload = $xmlB->asXML();
        
+<<<<<<< Updated upstream
             $xmlB = new SimpleXMLElement($xml); 
        
             if($array[0] != ''){
@@ -492,6 +509,9 @@ class inter2N extends eqLogic {
             
         
             $yop = $xmlB->asXML();
+=======
+
+>>>>>>> Stashed changes
 
          if(empty($username) ||  empty($password) || empty($ip) ){
             return;
@@ -499,7 +519,7 @@ class inter2N extends eqLogic {
             $startRequest =  $protocole . '://' . $username .':'. $password .'@'. $ip;
         }
         $http = new com_http( $startRequest . $stringForConfig);
-        $array_req = array('blob-cfg' => $yop);
+        $array_req = array('blob-cfg' => $xml_to_upload);
         $http->setPut($array_req);
 
         if(empty($startRequest)){
@@ -629,6 +649,46 @@ class inter2N extends eqLogic {
         public function preSave() {
          
         }
+  
+  
+  
+    public function sanitize_strings($string_code){
+     
+          $string_explode = explode(',', $string_code); 
+         foreach($string_explode as $element){             
+              trim($element);          
+          }
+         log::add('inter2N', 'debug', 'STRINGEXPLODE ' . json_encode($string_explode));
+          return $string_explode;
+      
+   
+         /* $result = self::verif_int($string_explode);
+           if($result == true){          
+              return $string_explode;
+          }else{
+            break;
+           }*/
+     }
+   
+  
+ /* public function verif_int($string_explode){
+    
+       $result = true;
+       foreach($string_explode as $element){
+           if(!is_int($element)){                    
+                     message::add('inter2N', 'Les mastercodes doivent etre de type numerique');  
+                     $result = false;
+                     break 2;                 
+                }else{
+                  intval($element);        
+                } 
+       }        
+       return $result;
+
+  }*/
+  
+  
+ 
         
         public function postSave() {
           
@@ -637,24 +697,31 @@ class inter2N extends eqLogic {
             $this->crea_cmd();
             $xml = $this->getXmlConfig($stringForConfig);
             $this->getConfig($stringForConfig, $xml);
-            $mastercode1 = intval($this->getConfiguration('mastercodeSwitch1'));
-            if(!is_int($mastercode1) ){ message::add('inter2N', 'Le mastercode 1 doit etre de type numerique'); };
-            $mastercode2 = intval($this->getConfiguration('mastercodeSwitch2'));
-          if(!is_int($mastercode2) ){ message::add('inter2N', 'Le mastercode 2 doit etre de type numerique'); };
-            $mastercode3 = intval($this->getConfiguration('mastercodeSwitch3'));
-          if(!is_int($mastercode3) ){ message::add('inter2N', 'Le mastercode 3 doit etre de type numerique'); };
-            $mastercode4 = intval($this->getConfiguration('mastercodeSwitch4'));
-          if(!is_int($mastercode4) ){ message::add('inter2N', 'Le mastercode 4 doit etre de type numerique'); };
-            
-         
-            $array_mastercodes = array();
-            array_push($array_mastercodes, $mastercode1);
-            array_push($array_mastercodes, $mastercode2);
-            array_push($array_mastercodes, $mastercode3);
-            array_push($array_mastercodes, $mastercode4);
+                    
+            $string1 = $this->getConfiguration('mastercodeSwitch1');
+            $string2 = $this->getConfiguration('mastercodeSwitch2');
+            $string3 = $this->getConfiguration('mastercodeSwitch3');
+            $string4 = $this->getConfiguration('mastercodeSwitch4');
           
-    
-            $rep_requete = $this->create_mastercode($array_mastercodes, $stringForConfig, $xml);
+          
+         
+          $arraystring1 = self::sanitize_strings($string1);
+          $arraystring2 = self::sanitize_strings($string2);
+          $arraystring3 = self::sanitize_strings($string3);
+          $arraystring4 = self::sanitize_strings($string4);
+         
+
+            $array_mastercodes = array(
+                          'Switch1' => $arraystring1,
+                          'Switch2' => $arraystring2,
+                          'Switch3' => $arraystring3,
+                          'Switch4' => $arraystring4
+            );
+          
+           
+        $rep_requete = $this->create_mastercode($array_mastercodes, $stringForConfig, $xml);
+            
+
             log::add('inter2N', 'debug', 'RESULTREQUETEMASTERCODE1 ' . json_encode($rep_requete));
           
     
@@ -807,7 +874,11 @@ class inter2N extends eqLogic {
                                }
                                if($cmd->getName() == 'Etat_porte'){
                                  $cmd->setTemplate('dashboard', 'door');
+<<<<<<< Updated upstream
                                  /*$cmd->setValue(0);*/
+=======
+                                /* $cmd->setValue(0);*/
+>>>>>>> Stashed changes
                                }
                                 $cmd->setType('info');
                                 $cmd->setSubType('binary');
