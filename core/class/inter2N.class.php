@@ -109,7 +109,6 @@ class inter2N extends eqLogic {
         }
         $http = new com_http( $startRequest . $string);
 
-
         if(empty($startRequest)){
         } else {
             $request = $http->exec();
@@ -191,7 +190,7 @@ class inter2N extends eqLogic {
             }
             $id = $eqLogic->getConfiguration('idSubs');
         if(empty($id)){
-            log::add('inter2N', 'debug', 'func:switchesStatus err:Id is empty');
+            log::add('inter2N', 'debug', 'L identifiant de l equipement est vide, redemarrez le demon');
         }else {
             $responsForLog = $eqLogic->logPull($id);
             //Create an array with status of Output
@@ -444,13 +443,12 @@ class inter2N extends eqLogic {
             if(empty($startRequest)){
             } else {
                 $request = $http->exec();
-                $respons = json_decode($request, true);
-                log::add('inter2N', 'debug', $respons);
-                return $respons;
+                /*$respons = json_decode($request, true);*/
+                return $request;
             }
 
-       log::add('inter2N', 'debug', 'STATUS_REQUETE_CONFIG ' . json_decode($respons));
-    log::add('inter2N', 'debug', 'STATUS_REQUETE_CONFIG2 ' . $respons);
+       log::add('inter2N', 'debug', 'STATUS_REQUETE_CONFIG ' . json_encode($request));
+        log::add('inter2N', 'debug', 'STATUS_REQUETE_CONFIG ' . $request);
 
   }
 
@@ -603,6 +601,10 @@ class inter2N extends eqLogic {
         public function postSave() {
 
             $stringForConfig = "/api/config";
+            $ip = $this->getConfiguration('ip');
+            if($ip != ''){
+                $this->setLogicalId($ip);
+            }
             $this->createCamera();
             $this->crea_cmd();
             $xml = $this->getXmlConfig($stringForConfig);
@@ -664,7 +666,6 @@ class inter2N extends eqLogic {
                         $cmd->setType('action');
                         $cmd->setSubType('other');
                         $cmd->setEqLogic_id($this->getId());
-                       /* $cmd->setOrder(9);*/
                         $cmd->save();
                     }
 
@@ -680,13 +681,12 @@ class inter2N extends eqLogic {
                         $cmd->setSubType('binary');
                         $cmd->setEqLogic_id($this->getId());
                         $cmd->setDisplay('generic_type', 'GENERIC');
-                       /* $cmd->setOrder(9);*/
                         $cmd->save();
 
                     }
                     $stateId = $cmd->getId();
 
-                   /* $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic->getId(), 'Switch Off_' . $switch);*/
+
                     $cmd = $this->getCmd(null, 'Switch Off_'. $switch);
                     if (!is_object($cmd)) {
                         $cmd = new inter2NCmd();
@@ -697,7 +697,6 @@ class inter2N extends eqLogic {
                     $cmd->setType('action');
                     $cmd->setSubType('other');
                     $cmd->setEqLogic_id($this->getId());
-                  /*  $cmd->setOrder(9);*/
                     $cmd->setDisplay('generic_type', 'SWITCH_OFF');
                     $cmd->setTemplate('dashboard', 'circle');
 
@@ -705,7 +704,7 @@ class inter2N extends eqLogic {
                     $cmd->setValue($stateId);
                     $cmd->save();
 
-                  /*  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic->getId(), 'Switch On_' . $switch);*/
+
                     $cmd = $this->getCmd(null, 'Switch On_'. $switch);
                     if (!is_object($cmd)) {
                         $cmd = new inter2NCmd();
@@ -716,7 +715,6 @@ class inter2N extends eqLogic {
                     $cmd->setType('action');
                     $cmd->setSubType('other');
                     $cmd->setEqLogic_id($this->getId());
-                   /* $cmd->setOrder(9);*/
                     $cmd->setDisplay('generic_type', 'SWITCH_ON');
                     $cmd->setTemplate('dashboard', 'circle');
 
@@ -748,7 +746,7 @@ class inter2N extends eqLogic {
 
                        }
 
-                      /*  $numorder = 0;*/
+
                         foreach($namesInfoBinary as $nameInfoBinary){
                             $nameInfoBinaryExplode = explode(";", $nameInfoBinary);
                             $nameCmdinter2N = $nameInfoBinaryExplode[0];
@@ -764,19 +762,18 @@ class inter2N extends eqLogic {
                                if($cmd->getName() == 'Mouvement'){
                                  $cmd->setTemplate('dashboard', 'presence');
                                  $cmd->setGeneric_type('PRESENCE');
-                               /*  $cmd->setDisplay('generic_type', 'PRESENCE');*/
+
 
                                }
                                if($cmd->getName() == 'Etat_porte'){
                                  $cmd->setTemplate('dashboard', 'door');
-                                /* $cmd->setValue(0);*/
+
                                }
                                 $cmd->setType('info');
                                 $cmd->setSubType('binary');
                                 $cmd->setEqLogic_id($this->getId());
-                              /*  $cmd->setOrder($numorder);*/
                                 $cmd->save();
-                              /*  $numorder ++;*/
+
                             }
                             log::add('inter2N', 'debug', 'cmdInfoBinaryCreate : ' . $cmd->getName());
                         }
