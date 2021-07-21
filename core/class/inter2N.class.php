@@ -155,33 +155,7 @@ class inter2N extends eqLogic {
         }
     }
 
-/*   public static function resetDash($event, $eqLogic_id){   
-                sleep(10);
-                $rzero = json_encode($event);
-                if($rzero == 'null'){
-                      $testval = 0;
-                      $cmdtest = cmd::byEqLogicId($eqLogic_id);
-                      foreach($cmdtest as $cmdt){
-                          $mystring = $cmdt->getName();
-                          $findme   = 'Etat SWITCH_';
-                          $pos = strpos($mystring, $findme);
 
-                          if($pos !== false){
-                               $cmdt->setConfiguration('find', 'true');
-                          }else{
-                                $cmdt->setConfiguration('find', 'false');
-                          
-                          }   
-                          if($cmdt->getSubType() == 'string'){
-                              $cmdt->event('');
-                          }elseif ($cmdt->getSubType() == 'binary' && $cmdt->getConfiguration('find') == 'false') {
-                               $cmdt->event(0);
-                           }                  
-                      }
-                }
-   }*/
- 
-  
   
      public static function refreshDash($eqLogic){   
               
@@ -425,91 +399,7 @@ class inter2N extends eqLogic {
     
     }
   
-  
-   public function resquest_put($string, $xml){
-    
-            $username = $this->getConfiguration('username');
-            $password = $this->getConfiguration('password');
-            $protocole = $this->getConfiguration('protocole');
-            $ip = $this->getConfiguration('ip');
-            $choicesignal = $this->getConfiguration('sonnerietype');
-   
-            $test = '';
-            if($choicesignal == 'simplesignal'){ $test = 1; };
-            if($choicesignal == 'bothsignal'){ $test = 2; };
-            if($choicesignal == 'nonesignal'){ $test = 0; };
-         
-            $xmlB = new SimpleXMLElement($xml);        
-            $xmlB->AccessControl->AccessPoint[0]->Signalization = $test;
-            $xmlB->AccessControl->AccessPoint[1]->Signalization = $test;
-            $yop = $xmlB->asXML();
 
-        if(empty($username) ||  empty($password) || empty($ip) ){
-            return;
-        } else {
-            $startRequest =  $protocole . '://' . $username .':'. $password .'@'. $ip;
-        }
-        $http = new com_http( $startRequest . $string);
-        $array_req = array('blob-cfg' => $yop);
-        $http->setPut($array_req);
-
-        if(empty($startRequest)){
-        } else {
-            $request = $http->exec();
-            $respons = json_decode($request, true);
-            log::add('inter2N', 'debug', $respons);
-            return $respons;
-        }
-    }
-  
-  
-  
-  
-  
-     public function create_mastercode($array, $stringForConfig, $xml){
-            $username = $this->getConfiguration('username');
-            $password = $this->getConfiguration('password');
-            $protocole = $this->getConfiguration('protocole');
-            $ip = $this->getConfiguration('ip');
-            $xmlB = new SimpleXMLElement($xml);
-            $i = 0;
-             foreach($array as $switch=>$array_switch){                                         
-                   $len_array_values = count($array_switch);
-                   
-                   for($j=0; $j < $len_array_values; $j++){
-                      if($switch != ''){
-                         $xmlB->Switches->Switch[$i]->Code[$j]->Code = $array_switch[$j];
-                        }
-  
-                   }  
-                   $i++;
-                
-             }                                
-
-            $xml_to_upload = $xmlB->asXML();
-       
-
-
-         if(empty($username) ||  empty($password) || empty($ip) ){
-            return;
-        } else {
-            $startRequest =  $protocole . '://' . $username .':'. $password .'@'. $ip;
-        }
-        $http = new com_http( $startRequest . $stringForConfig);
-        $array_req = array('blob-cfg' => $xml_to_upload);
-        $http->setPut($array_req);
-
-        if(empty($startRequest)){
-        } else {
-            $request = $http->exec();
-            $respons = json_decode($request, true);
-            log::add('inter2N', 'debug', $respons);
-            return $respons;
-        }
-    }
-  
-  
-  
   public function config_xml_put($arraymastercode, $stringForConfig, $xml){
     
             $username = $this->getConfiguration('username');
@@ -563,49 +453,7 @@ class inter2N extends eqLogic {
     
   }
 
-  
-  
-  
- public function set_config_signal($stringForConfig, $xml){
 
-   
-            $username = $this->getConfiguration('username');
-            $password = $this->getConfiguration('password');
-            $protocole = $this->getConfiguration('protocole');
-            $ip = $this->getConfiguration('ip');
-            $choicesignal = $this->getConfiguration('sonnerietype');
-   
-            $test = '';
-            if($choicesignal == 'simplesignal'){ $test = 1; };
-            if($choicesignal == 'bothsignal'){ $test = 2; };
-            if($choicesignal == 'nonesignal'){ $test = 0; };
-         
-            $xmlB = new SimpleXMLElement($xml);        
-            $xmlB->AccessControl->AccessPoint[0]->Signalization = $test;
-            $xmlB->AccessControl->AccessPoint[1]->Signalization = $test;
-            $xml_to_upload = $xmlB->asXML();
-
-        if(empty($username) ||  empty($password) || empty($ip) ){
-            return;
-        } else {
-            $startRequest =  $protocole . '://' . $username .':'. $password .'@'. $ip;
-        }
-        $http = new com_http( $startRequest . $stringForConfig);
-        $array_req = array('blob-cfg' => $xml_to_upload);
-        $http->setPut($array_req);
-
-        if(empty($startRequest)){
-        } else {
-            $request = $http->exec();
-            $respons = json_decode($request, true);
-            log::add('inter2N', 'debug', $respons);
-            return $respons;
-        }
-
-        log::add('inter2N', 'debug', 'RESULTREQUETE ' . json_encode($respons));
-
- }
-  
 
     public function action($action, $option, $exception){
         
