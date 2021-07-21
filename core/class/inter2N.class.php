@@ -488,30 +488,6 @@ class inter2N extends eqLogic {
 
             $xml_to_upload = $xmlB->asXML();
        
-<<<<<<< Updated upstream
-            $xmlB = new SimpleXMLElement($xml); 
-       
-            if($array[0] != ''){
-              $xmlB->Switches->Switch[0]->Code[0]->Code = $array[0];
-            }
-       
-            if($array[1] != ''){
-              $xmlB->Switches->Switch[1]->Code[0]->Code = $array[1];
-            }
-       
-            if($array[2] != ''){
-              $xmlB->Switches->Switch[2]->Code[0]->Code = $array[2];
-            }
-       
-            if($array[3] != ''){
-              $xmlB->Switches->Switch[3]->Code[0]->Code = $array[3];
-            }
-            
-        
-            $yop = $xmlB->asXML();
-=======
-
->>>>>>> Stashed changes
 
          if(empty($username) ||  empty($password) || empty($ip) ){
             return;
@@ -698,19 +674,11 @@ class inter2N extends eqLogic {
             $xml = $this->getXmlConfig($stringForConfig);
             $this->getConfig($stringForConfig, $xml);
                     
-            $string1 = $this->getConfiguration('mastercodeSwitch1');
-            $string2 = $this->getConfiguration('mastercodeSwitch2');
-            $string3 = $this->getConfiguration('mastercodeSwitch3');
-            $string4 = $this->getConfiguration('mastercodeSwitch4');
-          
-          
+            $arraystring1 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch1'));
+            $arraystring2 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch2'));
+            $arraystring3 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch3'));
+            $arraystring4 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch4'));
          
-          $arraystring1 = self::sanitize_strings($string1);
-          $arraystring2 = self::sanitize_strings($string2);
-          $arraystring3 = self::sanitize_strings($string3);
-          $arraystring4 = self::sanitize_strings($string4);
-         
-
             $array_mastercodes = array(
                           'Switch1' => $arraystring1,
                           'Switch2' => $arraystring2,
@@ -719,13 +687,9 @@ class inter2N extends eqLogic {
             );
           
            
-        $rep_requete = $this->create_mastercode($array_mastercodes, $stringForConfig, $xml);
+           $rep_requete = $this->create_mastercode($array_mastercodes, $stringForConfig, $xml);
             
-
-            log::add('inter2N', 'debug', 'RESULTREQUETEMASTERCODE1 ' . json_encode($rep_requete));
-          
-    
-         
+            log::add('inter2N', 'debug', 'REQUETE_MASTERCODES ' . json_encode($rep_requete));
           
 
         }
