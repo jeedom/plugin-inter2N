@@ -29,12 +29,12 @@ $eqLogics = eqLogic::byType($plugin->getId());
 foreach ($eqLogics as $eqLogic) {
 	$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
 	echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
-	
+
                       $namesearch = $eqLogic->getConfiguration('modelName');
-                      if (in_array($namesearch, array("2N Access Unit M", "2n Helios IP Vario", "2N IP Solo", "2N IP Verso"))){                      
+                      if (in_array($namesearch, array("2N Access Unit M", "2n Helios IP Vario", "2N IP Solo", "2N IP Verso"))){
                         echo '<img class="lazy" src="plugins/inter2N/core/config/devices/' .$namesearch. '.jpeg"/>';
 					} else {
-						echo '<img src="' . $plugin->getPathImgIcon() . '" />';                   
+						echo '<img src="' . $plugin->getPathImgIcon() . '" />';
 					}
 
 	echo '<br>';
@@ -150,15 +150,15 @@ foreach ($eqLogics as $eqLogic) {
                 <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch4" placeholder="Codes de type Numerique. Séparés par virgule si plusieurs. (Max 8)"/>
             </div>
         </div>
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
          <div class="form-group">
             <label class="col-sm-3 control-label">{{Module Empreinte Digitale}}</label>
             <div class="col-sm-3">
@@ -169,7 +169,7 @@ foreach ($eqLogics as $eqLogic) {
 					   <option value='no'> Non </option>
 				  </select>
 			    </div>
-           </div> 
+           </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Camera}}</label>
@@ -181,7 +181,7 @@ foreach ($eqLogics as $eqLogic) {
 					   <option value='no'> Non </option>
 				  </select>
 			    </div>
-           </div> 
+           </div>
         </div>
              <div class="form-group">
                  <label class="col-sm-3 control-label">{{Interrupteur de protection Anti-Ouverture}}</label>
@@ -193,7 +193,7 @@ foreach ($eqLogics as $eqLogic) {
                                <option value='no'> Non </option>
                           </select>
 			          </div>
-                </div> 
+                </div>
              </div>
              <div class="form-group">
             <label class="col-sm-3 control-label">{{Type de sonnerie validation Carte}}</label>
@@ -206,7 +206,7 @@ foreach ($eqLogics as $eqLogic) {
                        <option value='nonesignal'> Aucun </option>
 				  </select>
 			    </div>
-           </div> 
+           </div>
 
 </fieldset>
 </form>

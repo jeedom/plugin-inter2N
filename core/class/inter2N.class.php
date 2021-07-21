@@ -24,22 +24,23 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
 class inter2N extends eqLogic {
     /*     * *************************Attributs****************************** */
 
-  
-  
+
+
   public function getModel(){
+
        $stringForModel = "/api/system/info";
        $responsForModel = $this->resquest($stringForModel);
        if($responsForModel["success"] === true){
-          $modelrespons = $responsForModel["result"]["deviceName"]; 
+          $modelrespons = $responsForModel["result"]["deviceName"];
           $this->setConfiguration('modelName', $modelrespons);
           log::add('inter2N', 'debug', 'MODEL NAME ' . $modelrespons);
-       }else{      
+       }else{
            return "Modèle inconnu";
-       } 
+       }
   }
-  
-  
-  
+
+
+
     public static function deamon_info() {
         $return = array();
         $return['log'] = '';
@@ -51,7 +52,7 @@ class inter2N extends eqLogic {
         $return['launchable'] = 'ok';
         return $return;
     }
-    
+
     public static function deamon_start($_debug = false) {
         self::deamon_stop();
         $deamon_info = self::deamon_info();
@@ -71,7 +72,7 @@ class inter2N extends eqLogic {
         }
         $cron->run();
     }
-    
+
     public static function deamon_stop() {
         $cron = cron::byClassAndFunction('inter2N', 'allTheLog');
         if (!is_object($cron)) {
@@ -95,7 +96,7 @@ class inter2N extends eqLogic {
     }
 
     public function resquest($string){
-    
+
             $username = $this->getConfiguration('username');
             $password = $this->getConfiguration('password');
             $protocole = $this->getConfiguration('protocole');
@@ -107,7 +108,7 @@ class inter2N extends eqLogic {
             $startRequest =  $protocole . '://' . $username .':'. $password .'@'. $ip;
         }
         $http = new com_http( $startRequest . $string);
-      
+
 
         if(empty($startRequest)){
         } else {
@@ -117,9 +118,9 @@ class inter2N extends eqLogic {
             return $respons;
         }
     }
-  
 
- 
+
+
     public function createCamera(){
         if($this->getConfiguration('cameraselect') == 'yes'){
             $username = $this->getConfiguration('username');
@@ -128,7 +129,7 @@ class inter2N extends eqLogic {
             $port = config::byKey('portconfig', 'inter2N');
             $protocole = $this->getConfiguration('protocole');
             $name = $this->getName();
- 
+
             $camera_jeedom = eqLogic::byLogicalId('camerainter2N_'.$name, 'camera');
             if (class_exists('camera')) {
                 if (!is_object($camera_jeedom)) {
@@ -156,9 +157,9 @@ class inter2N extends eqLogic {
     }
 
 
-  
-     public static function refreshDash($eqLogic){   
-              
+
+     public static function refreshDash($eqLogic){
+
 
            $cmdtest = cmd::byEqLogicId($eqLogic->getId());
            foreach($cmdtest as $cmdt){
@@ -171,17 +172,17 @@ class inter2N extends eqLogic {
              }else{
                $cmdt->setConfiguration('find', 'false');
 
-             }   
+             }
              if($cmdt->getSubType() == 'string'){
                $cmdt->event('');
              }elseif ($cmdt->getSubType() == 'binary' && $cmdt->getConfiguration('find') == 'false') {
                $cmdt->event(0);
-             }                  
+             }
            }
 
     }
-  
-  
+
+
 
    public static function switchesStatus($eqLogic_id){
         	$eqLogic = eqLogic::byId($eqLogic_id);
@@ -198,7 +199,7 @@ class inter2N extends eqLogic {
             foreach ($responsForLog as $value){
                 $events = $value['events'];
             }
-           
+
             foreach($events as $event){
                 $params = $event['params'];
 				switch ($event['event']) {
@@ -206,13 +207,13 @@ class inter2N extends eqLogic {
                     log::add('inter2N', 'debug', 'Motion detected:' . $params['state']);
                     $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'Mouvement');
                     if($params['state'] == "in"){
-                        $cmd->event(1);  
+                        $cmd->event(1);
                         $eqLogic->refreshWidget();
                     }else{
                         $cmd->event(0);
                         $eqLogic->refreshWidget();
                     }
-                   
+
                     break;
                   case "NoiseDetected":
                     log::add('inter2N', 'debug', 'Noise detected:' . $params['state']);
@@ -220,7 +221,7 @@ class inter2N extends eqLogic {
                     if($params['state'] == "in"){
                         $cmd->event(1);
                         $eqLogic->refreshWidget();
-                        log::add('inter2N', 'debug', 'NoiseDetected');            
+                        log::add('inter2N', 'debug', 'NoiseDetected');
                     }elseif($params['state'] == "out"){
                         $cmd->event(0);
                         $eqLogic->refreshWidget();
@@ -253,14 +254,14 @@ class inter2N extends eqLogic {
                         $cmd->event(0);
                          $eqLogic->refreshWidget();
                     }
-                    
+
                     break;
                   case "CallStateChanged":
                     log::add('inter2N', 'debug', 'call :' . $params['direction'] . ' State :'. $params['state']);
                     $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"Appel");
                     $cmd->event($params['state']);
                     $eqLogic->refreshWidget();
-                    break; 
+                    break;
                   case "TamperSwitchActivated":
                     log::add('inter2N', 'debug', 'TamperSwitchActivated :' . $params['state']);
                     $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'Arrachement_Interphone');
@@ -299,7 +300,7 @@ class inter2N extends eqLogic {
                     $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"empreinte");
                     $cmd->event($params['uuid']);
                     $eqLogic->refreshWidget();
-                    break; 
+                    break;
                   case "MobKeyEntered":
                     log::add('inter2N', 'debug', 'MobKeyEntered :' . $params['direction'] . ' - UID : '.$params['authid']. ' - valid :'.$params['valid']);
                     $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"Bluetooth_Tel_Mobile");
@@ -316,9 +317,9 @@ class inter2N extends eqLogic {
                         $cmd->event(0);
                       $eqLogic->refreshWidget();
                     }
-                    break; 
+                    break;
               }
-              
+
             }
             if(@$state === false){
                 array_push($arrayStatusSwitches, '0');
@@ -344,7 +345,7 @@ class inter2N extends eqLogic {
         log::add('inter2N', 'debug', 'id' . $id);
         return @$id;
     }
-    
+
     public function unsubscribe($id){
         $stringForUnsubscribe = "/api/log/log/unsubscribe?id=" . $id;
         $responsForUnsubscribe = $this->resquest($stringForUnsubscribe);
@@ -357,14 +358,14 @@ class inter2N extends eqLogic {
         log::add('inter2N', 'debug', $stringForLog . ' ' . json_encode($responsForlog));
         return $responsForlog;
     }
-   
+
 
 
     public function switchesIdArray(){
 
-        $arrayIdSwitches = array();    
+        $arrayIdSwitches = array();
         $stringForCheckSwitches = "/api/switch/caps";
-        $responsForCheckSwitches = $this->resquest($stringForCheckSwitches);    
+        $responsForCheckSwitches = $this->resquest($stringForCheckSwitches);
         foreach ($responsForCheckSwitches as $value){
             $switches = $value['switches'];
             foreach($switches as $switch){
@@ -376,8 +377,8 @@ class inter2N extends eqLogic {
         }
         return $arrayIdSwitches;
     }
-  
-  
+
+
       public function getXmlConfig($string){
             $username = $this->getConfiguration('username');
             $password = $this->getConfiguration('password');
@@ -396,12 +397,12 @@ class inter2N extends eqLogic {
             $request = $http->exec();
             return $request;
         }
-    
+
     }
-  
+
 
   public function config_xml_put($arraymastercode, $stringForConfig, $xml){
-    
+
             $username = $this->getConfiguration('username');
             $password = $this->getConfiguration('password');
             $protocole = $this->getConfiguration('protocole');
@@ -413,24 +414,24 @@ class inter2N extends eqLogic {
             if($choicesignal == 'simplesignal'){ $test = 1; };
             if($choicesignal == 'bothsignal'){ $test = 2; };
             if($choicesignal == 'nonesignal'){ $test = 0; };
-    
+
             $xmlB->AccessControl->AccessPoint[0]->Signalization = $test;
             $xmlB->AccessControl->AccessPoint[1]->Signalization = $test;
-    
-           foreach($arraymastercode as $switch=>$array_switch){                                         
-                   $len_array_values = count($array_switch);                   
+
+           foreach($arraymastercode as $switch=>$array_switch){
+                   $len_array_values = count($array_switch);
                    for($j=0; $j < $len_array_values; $j++){
                       if($switch != ''){
                          $xmlB->Switches->Switch[$i]->Code[$j]->Code = $array_switch[$j];
-                        } 
-                   }  
+                        }
+                   }
                    $i++;
-                
-             }   
-    
+
+             }
+
             $xml_to_upload = $xmlB->asXML();
-    
-  
+
+
             if(empty($username) ||  empty($password) || empty($ip) ){
                 return;
             } else {
@@ -447,16 +448,16 @@ class inter2N extends eqLogic {
                 log::add('inter2N', 'debug', $respons);
                 return $respons;
             }
-    
+
        log::add('inter2N', 'debug', 'STATUS_REQUETE_CONFIG ' . json_decode($respons));
     log::add('inter2N', 'debug', 'STATUS_REQUETE_CONFIG2 ' . $respons);
-    
+
   }
 
 
 
     public function action($action, $option, $exception){
-        
+
         if($exception == 0){
             $base = "/api/io/ctrl?port=";
             if($action == 'input'){
@@ -483,7 +484,7 @@ class inter2N extends eqLogic {
         } else {
             if($action == 'On'){
                 $stringForAction = "/api/switch/ctrl?switch=" . $option . "&action=on";
-                
+
             } else {
                 $stringForAction = "/api/switch/ctrl?switch=" . $option . "&action=off";
 
@@ -493,48 +494,48 @@ class inter2N extends eqLogic {
         log::add('inter2N', 'debug', 'responsFunctionAction:' . json_encode($responsForAction));
         return $responsForAction;
     }
-   
-    
+
+
     /*     * ***********************Methode static*************************** */
-    
+
     /*
     * Fonction exécutée automatiquement toutes les minutes par Jeedom  */
     //   public static function cron() {
         //   }
-        
-        
-        
+
+
+
         /*
         * Fonction exécutée automatiquement toutes les heures par Jeedom
         public static function cronHourly() {
-            
+
         }
         */
-        
+
         /*
         * Fonction exécutée automatiquement tous les jours par Jeedom
         public static function cronDaily() {
-            
+
         }
         */
-        
-        
-        
+
+
+
         /*     * *********************Méthodes d'instance************************* */
-  
+
     /*     public function toHtml($_version = 'dashboard') {
-    
+
           $replace = $this->preToHtml($_version);
           if (!is_array($replace)) {
             return $replace;
           }
           $version = jeedom::versionAlias($_version);
 
-             
+
              foreach (($this->getCmd('info')) as $cmd) {
                 $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
                 $replace['#' . $cmd->getLogicalId() . '#'] = $cmd->execCmd();
-               
+
               }
 
            $replace['#Switch On_1_id#'] = $this->getCmd('action', 'Switch On_1')->getId();
@@ -543,102 +544,88 @@ class inter2N extends eqLogic {
           cache::set('widgetHtml' . $_version . $this->getId(), $html, 0);
           return $html;
         }*/
-  
-  
 
-        
+
+
+
         public function preInsert() {
               $this->setDisplay('height','350px');
               $this->setDisplay('width', '540px');
               $this->setIsEnable(1);
               $this->setIsVisible(1);
         }
-        
+
         public function postInsert() {
-            
+
         }
-        
+
         public function preSave() {
-         
+
         }
-  
-  
-  
+
+
+
     public static function sanitize_strings($string_code){
-     
-          $string_explode = explode(',', $string_code); 
-         foreach($string_explode as $element){             
-              trim($element);          
+
+          $string_explode = explode(',', $string_code);
+         foreach($string_explode as $element){
+              trim($element);
           }
          log::add('inter2N', 'debug', 'STRINGEXPLODE ' . json_encode($string_explode));
           return $string_explode;
-      
-   
+
+
          /* $result = self::verif_int($string_explode);
-           if($result == true){          
+           if($result == true){
               return $string_explode;
           }else{
             break;
            }*/
      }
-  
-  
-  
-   public function verif_preupdate($mastercode){
-       
-     
-     
-     
-   }
-   
-  
- /* public function verif_int($string_explode){
-    
-       $result = true;
-       foreach($string_explode as $element){
-           if(!is_int($element)){                    
-                     message::add('inter2N', 'Les mastercodes doivent etre de type numerique');  
-                     $result = false;
-                     break 2;                 
-                }else{
-                  intval($element);        
-                } 
-       }        
-       return $result;
 
-  }*/
-  
-  
- 
-        
+
+/*
+   public static function verif_numeric($arraycode){
+     $result = true;
+       foreach($arraycode as $element){
+          if(!is_int($element)){
+            message::add('inter2N','Erreur sur les mastercodes, rentrez des codes numeriques');
+            $result = false;
+            break 2;
+          }
+       }
+     return $result;
+   }
+
+*/
+
+
         public function postSave() {
-          
+
             $stringForConfig = "/api/config";
             $this->createCamera();
             $this->crea_cmd();
             $xml = $this->getXmlConfig($stringForConfig);
 
-          $arraystring1 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch1'));
-          $arraystring2 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch2'));
-          $arraystring3 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch3'));
-          $arraystring4 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch4'));
-         
+            $arraystring1 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch1'));
+            $arraystring2 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch2'));
+            $arraystring3 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch3'));
+            $arraystring4 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch4'));
 
-            $array_mastercodes = array(
-                          'Switch1' => $arraystring1,
-                          'Switch2' => $arraystring2,
-                          'Switch3' => $arraystring3,
-                          'Switch4' => $arraystring4
-            );
-          
-        /*  $this->set_config_signal($stringForConfig, $xml);
-        $rep_requete = $this->create_mastercode($array_mastercodes, $stringForConfig, $xml);*/
-            $this->config_xml_put($array_mastercodes, $stringForConfig, $xml);
+              $array_mastercodes = array(
+                            'Switch1' => $arraystring1,
+                            'Switch2' => $arraystring2,
+                            'Switch3' => $arraystring3,
+                            'Switch4' => $arraystring4
+                             );
 
+            if( ($this->getConfiguration('password') != '' )|| ($this->getConfiguration('ip') != '') ){
+                   $this->config_xml_put($array_mastercodes, $stringForConfig, $xml);
+            }
 
         }
-  
-   
+
+
         public function preUpdate() {
             if ($this->getConfiguration('ip') == '') {
 			     throw new Exception(__('L\'adresse IP de l\'équipement ne peut être vide', __FILE__));
@@ -649,24 +636,24 @@ class inter2N extends eqLogic {
            if ($this->getConfiguration('password') == '') {
 			     throw new Exception(__('Le mot de passe de l\'équipement ne peut être vide', __FILE__));
 		     }
-          
-  
-        }
-        
-        public function postUpdate() {
-            
-        }
-        
-        public function preRemove() {
-            
-        }
-        
-        public function postRemove() {
-            
+
+
         }
 
-        
-      public function crea_cmd() {        
+        public function postUpdate() {
+
+        }
+
+        public function preRemove() {
+
+        }
+
+        public function postRemove() {
+
+        }
+
+
+      public function crea_cmd() {
             //cmd ON for switches
            $cmd = cmd::byEqLogicIdAndLogicalId($this->getId(), 'refresh');
                     if (!is_object($cmd)) {
@@ -680,7 +667,7 @@ class inter2N extends eqLogic {
                        /* $cmd->setOrder(9);*/
                         $cmd->save();
                     }
-        
+
             $switches = $this->switchesIdArray();
             foreach ($switches as $switch) {
                     $cmd = cmd::byEqLogicIdAndLogicalId($this->getId(), 'SWITCH_' . $switch);
@@ -698,7 +685,7 @@ class inter2N extends eqLogic {
 
                     }
                     $stateId = $cmd->getId();
-                    
+
                    /* $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic->getId(), 'Switch Off_' . $switch);*/
                     $cmd = $this->getCmd(null, 'Switch Off_'. $switch);
                     if (!is_object($cmd)) {
@@ -713,11 +700,11 @@ class inter2N extends eqLogic {
                   /*  $cmd->setOrder(9);*/
                     $cmd->setDisplay('generic_type', 'SWITCH_OFF');
                     $cmd->setTemplate('dashboard', 'circle');
-                   
-        
+
+
                     $cmd->setValue($stateId);
                     $cmd->save();
-                    
+
                   /*  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic->getId(), 'Switch On_' . $switch);*/
                     $cmd = $this->getCmd(null, 'Switch On_'. $switch);
                     if (!is_object($cmd)) {
@@ -732,11 +719,11 @@ class inter2N extends eqLogic {
                    /* $cmd->setOrder(9);*/
                     $cmd->setDisplay('generic_type', 'SWITCH_ON');
                     $cmd->setTemplate('dashboard', 'circle');
-                 
+
                      $cmd->setValue($stateId);
                     $cmd->save();
             }
-            
+
             $arrayFunctions = array();
             $stringForEnableFunctions = "/api/system/caps";
             $responsForEnableFunctions = $this->resquest($stringForEnableFunctions);
@@ -747,16 +734,16 @@ class inter2N extends eqLogic {
                     array_push($arrayFunctions, $activeFunctions);
                     foreach( $arrayFunctions as $function){
                         //Cmd info binary
-                                          
+
                         $namesInfoBinary = ['motionDetection;Mouvement', 'noiseDetection;Bruit_Detecte', 'doorSensor;Arrachement_Interphone', 'doorSensor;Porte_ouverte_trop_longtemps', 'doorSensor;ouverture_non_autorisee', 'doorSensor;Etat_porte'];
                         $namesInfoString = ['keypad;dernier_bouton', 'keypad;Code_entree','cardReader;Lecteur_carte','fpReader;empreinte','phone;Bluetooth_Tel_Mobile', 'phone;Appel'];
-                     
-                       if($this->getConfiguration('fingerprintselect') == 'no'){ 
-                           $elementa = 'fpReader;empreinte';                       
+
+                       if($this->getConfiguration('fingerprintselect') == 'no'){
+                           $elementa = 'fpReader;empreinte';
                            unset($namesInfoString[array_search($elementa, $namesInfoString)]);
                        }
-                       if($this->getConfiguration('tamperswitchprot') == 'no'){   
-                           $elementb = 'doorSensor;Arrachement_Interphone';                       
+                       if($this->getConfiguration('tamperswitchprot') == 'no'){
+                           $elementb = 'doorSensor;Arrachement_Interphone';
                            unset($namesInfoBinary[array_search($elementb, $namesInfoBinary)]);
 
                        }
@@ -778,7 +765,7 @@ class inter2N extends eqLogic {
                                  $cmd->setTemplate('dashboard', 'presence');
                                  $cmd->setGeneric_type('PRESENCE');
                                /*  $cmd->setDisplay('generic_type', 'PRESENCE');*/
-                                 
+
                                }
                                if($cmd->getName() == 'Etat_porte'){
                                  $cmd->setTemplate('dashboard', 'door');
@@ -793,8 +780,8 @@ class inter2N extends eqLogic {
                             }
                             log::add('inter2N', 'debug', 'cmdInfoBinaryCreate : ' . $cmd->getName());
                         }
-    
-                      
+
+
                         foreach($namesInfoString as $nameInfoString){
                             //Cmd info String
                             $nameInfoStringExplode = explode(";", $nameInfoString);
@@ -818,7 +805,7 @@ class inter2N extends eqLogic {
                                  $cmd->setDisplay('showNameOndashboard',1);
                                  $cmd->setDisplay('showIconAndNamedashboard',1);
                                }
-                            
+
                                 $cmd->setType('info');
                                 $cmd->setSubType('string');
                                 $cmd->setEqLogic_id($this->getId());
@@ -834,53 +821,53 @@ class inter2N extends eqLogic {
                 }
             }
         }
-        
+
         //  Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
-    
-        
+
+
         /*
         * Non obligatoire mais ca permet de déclencher une action après modification de variable de configuration
         public static function postConfig_<Variable>() {
         }
         */
-        
+
         /*
         * Non obligatoire mais ca permet de déclencher une action avant modification de variable de configuration
         public static function preConfig_<Variable>() {
         }
         */
-        
+
         /*     * **********************Getteur Setteur*************************** */
     }
-    
+
     class inter2NCmd extends cmd {
         /*     * *************************Attributs****************************** */
-        
-        
+
+
         /*     * ***********************Methode static*************************** */
-        
-        
+
+
         /*     * *********************Methode d'instance************************* */
-        
+
         /*
         * Non obligatoire permet de demander de ne pas supprimer les commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
         public function dontRemoveCmd() {
             return true;
         }
         */
-        
+
         public function execute($_options = array()) {
             $eqLogic = $this->getEqLogic();
             if ($this->getType() != 'action' && 'ínfo') {
                 return;
             }
-          
+
 
             switch ($this->getLogicalId()) {
                 case 'refresh':
-                    inter2N::refreshDash($eqLogic);                  
+                    inter2N::refreshDash($eqLogic);
                     break;
-              
+
             }
 
             $mystring = $this->getLogicalId();
@@ -919,7 +906,7 @@ class inter2N extends eqLogic {
             } else {
                 return;
             }
-        
+
             $exception = 0;
 
             switch ($this->getLogicalId()) {
@@ -930,21 +917,21 @@ class inter2N extends eqLogic {
                     $eqLogic->action($action, $option, $exception);
                     return;
                 break;
-                
+
                 case 'Switch Off_' . $option:
                     $action = 'Off';
                     $exception = 1;
                     $eqLogic->action($action, $option, $exception);
                     return;
                 break;
-                
+
                 case 'input_on':
                     $action = 'input';
                     $exception = 0;
                     $eqLogic->action($action, $option, $exception);
                     return;
                 break;
-                
+
                 case 'input_off':
                     $action = 'input';
                     $option = 0;
@@ -952,7 +939,7 @@ class inter2N extends eqLogic {
                     $eqLogic->action($action, $option, $exception);
                     return;
                 break;
-                
+
                 case 'output_on':
                     $action = 'output';
                     $exception = 0;
@@ -960,7 +947,7 @@ class inter2N extends eqLogic {
                     $eqLogic->action($action, $option, $exception);
                     return;
                 break;
-                
+
                 case 'output_off':
                     log::add('inter2N', 'debug', 'passe');
                     $action = 'output';
@@ -969,14 +956,14 @@ class inter2N extends eqLogic {
                     $eqLogic->action($action, $option, $exception);
                     return;
                 break;
-                
+
                 case 'relay_on':
                     $action = 'relay';
                     $exception = 0;
                     $eqLogic->action($action, $option, $exception);
                     return;
                 break;
-                
+
                 case 'relay_off':
                     $action = 'relay';
                     $exception = 0;
@@ -991,9 +978,9 @@ class inter2N extends eqLogic {
                     $eqLogic->action($action, $option, $exception);
                     return;
                 break;
-           
+
             };
         }
-        
+
         /*     * **********************Getteur Setteur*************************** */
     }
