@@ -216,7 +216,7 @@ class inter2N extends eqLogic {
             }
             $id = $eqLogic->getConfiguration('idSubs');
         if(empty($id)){
-            log::add('inter2N', 'debug', 'ID vide, redemarrez le démon pour l attribution d un ID');
+            log::add('inter2N', 'debug', 'func:switchesStatus err:Id is empty');
         }else {
             $responsForLog = $eqLogic->logPull($id);
             //Create an array with status of Output
@@ -489,6 +489,7 @@ class inter2N extends eqLogic {
             $xml_to_upload = $xmlB->asXML();
        
 
+
          if(empty($username) ||  empty($password) || empty($ip) ){
             return;
         } else {
@@ -506,15 +507,102 @@ class inter2N extends eqLogic {
             return $respons;
         }
     }
+  
+  
+  
+  public function config_xml_put($arraymastercode, $stringForConfig, $xml){
+    
+            $username = $this->getConfiguration('username');
+            $password = $this->getConfiguration('password');
+            $protocole = $this->getConfiguration('protocole');
+            $ip = $this->getConfiguration('ip');
+            $choicesignal = $this->getConfiguration('sonnerietype');
+            $xmlB = new SimpleXMLElement($xml);
+            $i = 0;
+            $test = '';
+            if($choicesignal == 'simplesignal'){ $test = 1; };
+            if($choicesignal == 'bothsignal'){ $test = 2; };
+            if($choicesignal == 'nonesignal'){ $test = 0; };
+    
+            $xmlB->AccessControl->AccessPoint[0]->Signalization = $test;
+            $xmlB->AccessControl->AccessPoint[1]->Signalization = $test;
+    
+           foreach($arraymastercode as $switch=>$array_switch){                                         
+                   $len_array_values = count($array_switch);                   
+                   for($j=0; $j < $len_array_values; $j++){
+                      if($switch != ''){
+                         $xmlB->Switches->Switch[$i]->Code[$j]->Code = $array_switch[$j];
+                        } 
+                   }  
+                   $i++;
+                
+             }   
+    
+            $xml_to_upload = $xmlB->asXML();
+    
+  
+            if(empty($username) ||  empty($password) || empty($ip) ){
+                return;
+            } else {
+                $startRequest =  $protocole . '://' . $username .':'. $password .'@'. $ip;
+            }
+            $http = new com_http( $startRequest . $stringForConfig);
+            $array_req = array('blob-cfg' => $xml_to_upload);
+            $http->setPut($array_req);
+
+            if(empty($startRequest)){
+            } else {
+                $request = $http->exec();
+                $respons = json_decode($request, true);
+                log::add('inter2N', 'debug', $respons);
+                return $respons;
+            }
+    
+       log::add('inter2N', 'debug', 'STATUS_REQUETE_CONFIG ' . json_decode($respons));
+    log::add('inter2N', 'debug', 'STATUS_REQUETE_CONFIG2 ' . $respons);
+    
+  }
 
   
   
   
- public function getConfig($stringForConfig, $xml){
+ public function set_config_signal($stringForConfig, $xml){
 
-        $rep_requete =  $this->resquest_put($stringForConfig, $xml);
-        log::add('inter2N', 'debug', 'RESULTREQUETE ' . json_encode($rep_requete));
+   
+            $username = $this->getConfiguration('username');
+            $password = $this->getConfiguration('password');
+            $protocole = $this->getConfiguration('protocole');
+            $ip = $this->getConfiguration('ip');
+            $choicesignal = $this->getConfiguration('sonnerietype');
+   
+            $test = '';
+            if($choicesignal == 'simplesignal'){ $test = 1; };
+            if($choicesignal == 'bothsignal'){ $test = 2; };
+            if($choicesignal == 'nonesignal'){ $test = 0; };
+         
+            $xmlB = new SimpleXMLElement($xml);        
+            $xmlB->AccessControl->AccessPoint[0]->Signalization = $test;
+            $xmlB->AccessControl->AccessPoint[1]->Signalization = $test;
+            $xml_to_upload = $xmlB->asXML();
 
+        if(empty($username) ||  empty($password) || empty($ip) ){
+            return;
+        } else {
+            $startRequest =  $protocole . '://' . $username .':'. $password .'@'. $ip;
+        }
+        $http = new com_http( $startRequest . $stringForConfig);
+        $array_req = array('blob-cfg' => $xml_to_upload);
+        $http->setPut($array_req);
+
+        if(empty($startRequest)){
+        } else {
+            $request = $http->exec();
+            $respons = json_decode($request, true);
+            log::add('inter2N', 'debug', $respons);
+            return $respons;
+        }
+
+        log::add('inter2N', 'debug', 'RESULTREQUETE ' . json_encode($respons));
 
  }
   
@@ -628,7 +716,7 @@ class inter2N extends eqLogic {
   
   
   
-    public function sanitize_strings($string_code){
+    public static function sanitize_strings($string_code){
      
           $string_explode = explode(',', $string_code); 
          foreach($string_explode as $element){             
@@ -645,6 +733,15 @@ class inter2N extends eqLogic {
             break;
            }*/
      }
+  
+  
+  
+   public function verif_preupdate($mastercode){
+       
+     
+     
+     
+   }
    
   
  /* public function verif_int($string_explode){
@@ -672,13 +769,13 @@ class inter2N extends eqLogic {
             $this->createCamera();
             $this->crea_cmd();
             $xml = $this->getXmlConfig($stringForConfig);
-            $this->getConfig($stringForConfig, $xml);
-                    
-            $arraystring1 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch1'));
-            $arraystring2 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch2'));
-            $arraystring3 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch3'));
-            $arraystring4 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch4'));
+
+          $arraystring1 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch1'));
+          $arraystring2 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch2'));
+          $arraystring3 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch3'));
+          $arraystring4 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch4'));
          
+
             $array_mastercodes = array(
                           'Switch1' => $arraystring1,
                           'Switch2' => $arraystring2,
@@ -686,11 +783,10 @@ class inter2N extends eqLogic {
                           'Switch4' => $arraystring4
             );
           
-           
-           $rep_requete = $this->create_mastercode($array_mastercodes, $stringForConfig, $xml);
-            
-            log::add('inter2N', 'debug', 'REQUETE_MASTERCODES ' . json_encode($rep_requete));
-          
+        /*  $this->set_config_signal($stringForConfig, $xml);
+        $rep_requete = $this->create_mastercode($array_mastercodes, $stringForConfig, $xml);*/
+            $this->config_xml_put($array_mastercodes, $stringForConfig, $xml);
+
 
         }
   
@@ -838,11 +934,7 @@ class inter2N extends eqLogic {
                                }
                                if($cmd->getName() == 'Etat_porte'){
                                  $cmd->setTemplate('dashboard', 'door');
-<<<<<<< Updated upstream
-                                 /*$cmd->setValue(0);*/
-=======
                                 /* $cmd->setValue(0);*/
->>>>>>> Stashed changes
                                }
                                 $cmd->setType('info');
                                 $cmd->setSubType('binary');
