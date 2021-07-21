@@ -129,25 +129,25 @@ foreach ($eqLogics as $eqLogic) {
               <div class="form-group">
             <label class="col-sm-3 control-label">{{Code SuperUtilisateur Switch1}}</label>
             <div class="col-sm-3">
-                <input type="password" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch1" placeholder="Tapez un code pour avoir tous les droits"/>
+                <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch1" placeholder="Tapez un code pour avoir tous les droits"/>
             </div>
         </div>
            <div class="form-group">
             <label class="col-sm-3 control-label">{{Code SuperUtilisateur Switch2}}</label>
             <div class="col-sm-3">
-                <input type="password" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch2" placeholder="Tapez un code pour avoir tous les droits"/>
+                <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch2" placeholder="Tapez un code pour avoir tous les droits"/>
             </div>
         </div>
            <div class="form-group">
             <label class="col-sm-3 control-label">{{Code SuperUtilisateur Switch3}}</label>
             <div class="col-sm-3">
-                <input type="password" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch3" placeholder="Tapez un code pour avoir tous les droits"/>
+                <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch3" placeholder="Tapez un code pour avoir tous les droits"/>
             </div>
         </div>
            <div class="form-group">
             <label class="col-sm-3 control-label">{{Code SuperUtilisateur Switch4}}</label>
             <div class="col-sm-3">
-                <input type="password" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch4" placeholder="Tapez un code pour avoir tous les droits"/>
+                <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch4" placeholder="Tapez un code pour avoir tous les droits"/>
             </div>
         </div>
         
