@@ -62,6 +62,11 @@ Dans les menus deroulants, choisir les modules installés ou non sur votre inter
 
 
 Vous pouvez créer directement sans passer par l'interface de votre 2N, un code par Switch disponible suivant votre appareil, dans Code Superutilisateur.
+Vous pouvez séparer les codes par une virgule pour attribuer plusieurs codes par Switch
+>**IMPORTANT**
+>
+> Les codes doivent être de type numerique
+
 Vous pouvez egalement changer le type de signal quand une carte non valide est passée devant le lecteur (Simple Beep, Beep + Lumiere, ou Aucun).
 
 ![config](../images/2nSuperUser.png)
