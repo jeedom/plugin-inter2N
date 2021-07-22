@@ -378,6 +378,25 @@ class inter2N extends eqLogic {
     }
 
 
+    public function iOIdArray(){
+
+        $arrayIoSwitches = array();
+        $stringForCheckIo = "/api/io/caps";
+        $responsForCheckIo = $this->resquest($stringForCheckIo);
+        foreach ($responsForCheckIo as $value){
+            $io = $value['ports'];
+            foreach($io as $element){
+                if($element['port'] != '' ){
+                    $idport =  $element['port'];
+                    array_push($arrayIoSwitches, $idport);
+                } else {}
+            }
+        }
+        return $arrayIoSwitches;
+        /*return $responsForCheckIo;*/
+    }
+
+
       public function getXmlConfig($string){
             $username = $this->getConfiguration('username');
             $password = $this->getConfiguration('password');
@@ -454,32 +473,8 @@ class inter2N extends eqLogic {
 
 
 
-    public function action($action, $option, $exception){
+    public function action($action, $option){
 
-        if($exception == 0){
-            $base = "/api/io/ctrl?port=";
-            if($action == 'input'){
-                if($option == 1){
-                    $stringForAction = $base . $action . "1&action=on&response=inputOn";
-                } else {
-                    $stringForAction = $base . $action . "1&action=off&response=inputOff";
-                }
-            } elseif($action == 'output'){
-                if($option == 1){
-                    $stringForAction =  $base . $action . "1&action=on&response=outputOn";
-                } else {
-                    $stringForAction =  $base . $action ."1&action=off&response=outputOff";
-                }
-            } elseif ($action == 'relay' ){
-                if($option == 1){
-                    $stringForAction =  $base . $action . "1&action=on&response=relayOn";
-                } else {
-                    $stringForAction =  $base . $action ."1&action=off&response=relayOff";
-                }
-            } elseif ($action == 'restart'){
-                $stringForAction = '/api/system/' . $action;
-            }
-        } else {
             if($action == 'On'){
                 $stringForAction = "/api/switch/ctrl?switch=" . $option . "&action=on";
 
@@ -487,11 +482,27 @@ class inter2N extends eqLogic {
                 $stringForAction = "/api/switch/ctrl?switch=" . $option . "&action=off";
 
             }
+
+        $responsForAction = $this->resquest($stringForAction);
+        log::add('inter2N', 'debug', 'responsFunctionAction:' . json_encode($responsForAction));
+        return $responsForAction;
+    }
+
+
+
+    public function action_iO($typeiO,$exception){
+        $base = "/api/io/ctrl?port=";
+        if($exception == 'on'){
+          $stringForAction = $base . $typeiO . "&action=on";
+        }elseif($exception == 'off'){
+          $stringForAction = $base . $typeiO . "&action=off";
         }
         $responsForAction = $this->resquest($stringForAction);
         log::add('inter2N', 'debug', 'responsFunctionAction:' . json_encode($responsForAction));
         return $responsForAction;
     }
+
+
 
 
     /*     * ***********************Methode static*************************** */
@@ -572,34 +583,13 @@ class inter2N extends eqLogic {
          log::add('inter2N', 'debug', 'STRINGEXPLODE ' . json_encode($string_explode));
           return $string_explode;
 
-
-         /* $result = self::verif_int($string_explode);
-           if($result == true){
-              return $string_explode;
-          }else{
-            break;
-           }*/
      }
 
 
-/*
-   public static function verif_numeric($arraycode){
-     $result = true;
-       foreach($arraycode as $element){
-          if(!is_int($element)){
-            message::add('inter2N','Erreur sur les mastercodes, rentrez des codes numeriques');
-            $result = false;
-            break 2;
-          }
-       }
-     return $result;
-   }
-
-*/
-
 
         public function postSave() {
-
+            $ports = $this->iOIdArray();
+            log::add('inter2N', 'debug', 'PORTS ' .json_encode($ports));
             $stringForConfig = "/api/config";
             $ip = $this->getConfiguration('ip');
             if($ip != ''){
@@ -668,6 +658,59 @@ class inter2N extends eqLogic {
                         $cmd->setEqLogic_id($this->getId());
                         $cmd->save();
                     }
+            $ports = $this->iOIdArray();
+            foreach ($ports as $port) {
+                    $cmd = cmd::byEqLogicIdAndLogicalId($this->getId(), $port);
+                    if (!is_object($cmd)) {
+                        $cmd = new inter2NCmd();
+                        $cmd->setLogicalId($port);
+                        $cmd->setName(__($port, __FILE__));
+                        $cmd->setIsVisible(0);
+                        $cmd->setType('info');
+                        $cmd->setSubType('binary');
+                        $cmd->setEqLogic_id($this->getId());
+                        $cmd->setDisplay('generic_type', 'GENERIC');
+                        $cmd->save();
+
+                    }
+                    $stateId = $cmd->getId();
+
+
+                    $cmd = $this->getCmd(null, $port.'_Off');
+                    if (!is_object($cmd)) {
+                        $cmd = new inter2NCmd();
+                        $cmd->setLogicalId($port.'_Off');
+                        $cmd->setName(__($port.'_off', __FILE__));
+                        $cmd->setIsVisible(1);
+                    }
+                    $cmd->setType('action');
+                    $cmd->setSubType('other');
+                    $cmd->setEqLogic_id($this->getId());
+                    $cmd->setDisplay('generic_type', 'SWITCH_OFF');
+                    $cmd->setTemplate('dashboard', 'circle');
+
+
+                    $cmd->setValue($stateId);
+                    $cmd->save();
+
+
+                    $cmd = $this->getCmd(null, $port.'_On');
+                    if (!is_object($cmd)) {
+                        $cmd = new inter2NCmd();
+                        $cmd->setLogicalId($port.'_On');
+                        $cmd->setName(__($port.'_On', __FILE__));
+                        $cmd->setIsVisible(1);
+                    }
+                    $cmd->setType('action');
+                    $cmd->setSubType('other');
+                    $cmd->setEqLogic_id($this->getId());
+                    $cmd->setDisplay('generic_type', 'SWITCH_ON');
+                    $cmd->setTemplate('dashboard', 'circle');
+
+                     $cmd->setValue($stateId);
+                    $cmd->save();
+            }
+
 
             $switches = $this->switchesIdArray();
             foreach ($switches as $switch) {
@@ -858,13 +901,10 @@ class inter2N extends eqLogic {
             if ($this->getType() != 'action' && 'ínfo') {
                 return;
             }
-
-
             switch ($this->getLogicalId()) {
                 case 'refresh':
                     inter2N::refreshDash($eqLogic);
                     break;
-
             }
 
             $mystring = $this->getLogicalId();
@@ -872,72 +912,60 @@ class inter2N extends eqLogic {
             $pos = strpos($mystring, $findme);
             if($pos !== false){
                 $id = explode("_", $mystring);
-                $option = $id[1];
+                $findtwo = 'Switch';
+                $pos2 = strpos($id[0], $findtwo);
+                if($pos2 !== false){
+                  $option = $id[1];
+                }else{
+                  $option = $id[0];
+                }
+
             } elseif($pos == false){
                 $findmeOff = 'Off';
                 $posOff = strpos($mystring, $findmeOff);
                 if($posOff !== false){
                     $id = explode("_", $mystring);
-                    $option = $id[1];
-                }
-                $findmeInput = 'input';
-                $posInput = strpos($mystring, $findmeInput);
-                if($posInput !== false){
-                    $option = 1;
-                }
-                $findmeOutput = 'output';
-                $posOutput = strpos($mystring, $findmeOutput);
-                if($posOutput !== false){
-                    $option = 1;
-                }
-                $findmeRelay = 'relay';
-                $posRelay= strpos($mystring, $findmeRelay);
-                if($posRelay !== false){
-                    $option = 1;
-                }
-                $findmeRestart = 'restart';
-                $posRelay= strpos($mystring, $findmeRestart);
-                if($posRelay !== false){
-                    $option = 1;
+                    $findmeOff2 = 'Switch';
+                    $posoff2 = strpos($id[0], $findmeOff2);
+                    if($posoff2 !== false){
+                      $option = $id[1];
+                    }else{
+                      $option = $id[0];
+                    }
                 }
             } else {
                 return;
             }
 
-            $exception = 0;
-
             switch ($this->getLogicalId()) {
 
                 case 'Switch On_' . $option:
                     $action = 'On';
-                    $exception = 1;
-                    $eqLogic->action($action, $option, $exception);
+                    $eqLogic->action($action, $option);
                     return;
                 break;
 
                 case 'Switch Off_' . $option:
                     $action = 'Off';
-                    $exception = 1;
-                    $eqLogic->action($action, $option, $exception);
+                    $eqLogic->action($action, $option);
                     return;
                 break;
 
-                case 'input_on':
-                    $action = 'input';
-                    $exception = 0;
-                    $eqLogic->action($action, $option, $exception);
+                case $option.'_On':
+                    $typeiO = $option;
+                    $exception = 'on';
+                    $eqLogic->action_iO($typeiO, $exception);
                     return;
                 break;
 
-                case 'input_off':
-                    $action = 'input';
-                    $option = 0;
-                    $exception = 0;
-                    $eqLogic->action($action, $option, $exception);
+                case $option.'_Off':
+                    $typeiO = $option;
+                    $exception = 'off';
+                    $eqLogic->action_iO($typeiO, $exception);
                     return;
                 break;
 
-                case 'output_on':
+                /*case $option.'_On':
                     $action = 'output';
                     $exception = 0;
                     $option = 1;
@@ -974,7 +1002,7 @@ class inter2N extends eqLogic {
                     $exception = 0;
                     $eqLogic->action($action, $option, $exception);
                     return;
-                break;
+                break;*/
 
             };
         }
