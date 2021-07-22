@@ -255,6 +255,34 @@ class inter2N extends eqLogic {
                     }
 
                     break;
+                    case "InputChanged":
+                      log::add('inter2N', 'debug', 'etat input:' . $params['port'] . ' State :'. $params['state']);
+                      $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id, $params['port']);
+                      if($params['state'] == true){
+                           $cmd->event(1);
+                           $eqLogic->refreshWidget();
+                      } else{
+                          $cmd->event(0);
+                           $eqLogic->refreshWidget();
+                      }
+                      break;
+
+                      case "OutputChanged":
+                        log::add('inter2N', 'debug', 'etat input:' . $params['port'] . ' State :'. $params['state']);
+                        $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id, $params['port']);
+                        if($params['state'] == true){
+                            $cmd->event(1);
+                             $eqLogic->refreshWidget();
+                        } else{
+                            $cmd->event(0);
+                             $eqLogic->refreshWidget();
+                        }
+
+                        break;
+
+
+
+
                   case "CallStateChanged":
                     log::add('inter2N', 'debug', 'call :' . $params['direction'] . ' State :'. $params['state']);
                     $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"Appel");
@@ -326,7 +354,7 @@ class inter2N extends eqLogic {
                 array_push($arrayStatusSwitches, '1');
             }
            /* inter2N::refreshDash($eqLogic);*/
-            log::add('inter2N', 'debug', 'responsForEventSwitch:' . json_encode($event));
+          /*  log::add('inter2N', 'debug', 'responsForEventSwitch:' . json_encode($event));*/
             log::add('inter2N', 'debug', 'arrStatusSwitch' . json_encode($arrayStatusSwitches));
         }
     }
