@@ -848,6 +848,9 @@ class inter2N extends eqLogic {
 
                                 $cmd->setType('info');
                                 $cmd->setSubType('string');
+                                if( ($cmd->getLogicalId() == 'Code_entree') || ($cmd->getLogicalId() == 'Lecteur_carte')  ){
+                                  $cmd->setConfiguration('repeatEventManagement','always');
+                                }
                                 $cmd->setEqLogic_id($this->getId());
                                 $cmd->setOrder(1);
                                 $cmd->save();
