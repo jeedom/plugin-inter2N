@@ -230,7 +230,7 @@ class inter2N extends eqLogic {
                     break;
                   case "KeyPressed":
                     log::add('inter2N', 'info', 'key pressed:' . $params['key']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"Dernier_bouton_appuye");
+                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"dernier_bouton");
                     $cmd->event($params['key']);
                     break;
                   case "CodeEntered":
