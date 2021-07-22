@@ -247,10 +247,10 @@ class inter2N extends eqLogic {
                     log::add('inter2N', 'debug', 'etat switch:' . $params['switch'] . ' State :'. $params['state']);
                     $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'SWITCH_'.$params['switch']);
                     if($params['state'] == true){
-                        $cmd->event(1);
+                         $cmd->event(1);
                          $eqLogic->refreshWidget();
                     } else{
-                        $cmd->event(0);
+                         $cmd->event(0);
                          $eqLogic->refreshWidget();
                     }
 
@@ -262,7 +262,7 @@ class inter2N extends eqLogic {
                            $cmd->event(1);
                            $eqLogic->refreshWidget();
                       } else{
-                          $cmd->event(0);
+                           $cmd->event(0);
                            $eqLogic->refreshWidget();
                       }
                       break;
@@ -271,10 +271,10 @@ class inter2N extends eqLogic {
                         log::add('inter2N', 'debug', 'etat input:' . $params['port'] . ' State :'. $params['state']);
                         $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id, $params['port']);
                         if($params['state'] == true){
-                            $cmd->event(1);
+                             $cmd->event(1);
                              $eqLogic->refreshWidget();
                         } else{
-                            $cmd->event(0);
+                             $cmd->event(0);
                              $eqLogic->refreshWidget();
                         }
 
