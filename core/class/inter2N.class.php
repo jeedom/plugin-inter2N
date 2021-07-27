@@ -59,7 +59,7 @@ class inter2N extends eqLogic {
         if ($deamon_info['launchable'] != 'ok') {
             throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
         }
-         log::add('inter2N', 'debug', 'subscribe id ' . $idSubs);
+        log::add('inter2N', 'debug', 'subscribe id ' . $idSubs);
         foreach (eqLogic::byType('inter2N') as $eqLogic) {
             $idSubs = $eqLogic->subscribe();
             $eqLogic->setConfiguration('idSubs', $idSubs);
@@ -159,7 +159,6 @@ class inter2N extends eqLogic {
 
      public static function refreshDash($eqLogic){
 
-
            $cmdtest = cmd::byEqLogicId($eqLogic->getId());
            foreach($cmdtest as $cmdt){
              $mystring = $cmdt->getName();
@@ -189,174 +188,170 @@ class inter2N extends eqLogic {
             return;
             }
             $id = $eqLogic->getConfiguration('idSubs');
-        if(empty($id)){
-            log::add('inter2N', 'debug', 'L identifiant de l equipement est vide, redemarrez le demon');
-        }else {
-            $responsForLog = $eqLogic->logPull($id);
-            //Create an array with status of Output
-            $arrayStatusSwitches = array();
-            foreach ($responsForLog as $value){
-                $events = $value['events'];
-            }
+            if(empty($id)){
+                log::add('inter2N', 'debug', 'L identifiant de l equipement est vide, redemarrez le demon');
+            }else {
+                $responsForLog = $eqLogic->logPull($id);
+                //Create an array with status of Output
+                $arrayStatusSwitches = array();
+                foreach ($responsForLog as $value){
+                    $events = $value['events'];
+                }
 
-            foreach($events as $event){
-                $params = $event['params'];
-				switch ($event['event']) {
-                  case "MotionDetected":
-                    log::add('inter2N', 'debug', 'Motion detected:' . $params['state']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'Mouvement');
-                    if($params['state'] == "in"){
-                        $cmd->event(1);
-                        $eqLogic->refreshWidget();
-                    }else{
-                        $cmd->event(0);
-                        $eqLogic->refreshWidget();
+                foreach($events as $event){
+                    $params = $event['params'];
+    				        switch ($event['event']) {
+                                case "MotionDetected":
+                                  log::add('inter2N', 'debug', 'Motion detected:' . $params['state']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'Mouvement');
+                                  if($params['state'] == "in"){
+                                      $cmd->event(1);
+                                      $eqLogic->refreshWidget();
+                                  }else{
+                                      $cmd->event(0);
+                                      $eqLogic->refreshWidget();
+                                  }
+
+                                  break;
+                                case "NoiseDetected":
+                                  log::add('inter2N', 'debug', 'Noise detected:' . $params['state']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'Bruit_Detecte');
+                                  if($params['state'] == "in"){
+                                      $cmd->event(1);
+                                      $eqLogic->refreshWidget();
+                                      log::add('inter2N', 'debug', 'NoiseDetected');
+                                  }elseif($params['state'] == "out"){
+                                      $cmd->event(0);
+                                      $eqLogic->refreshWidget();
+                                  }else{
+                                      $cmd->event(0);
+                                  }
+                                  break;
+                                case "KeyPressed":
+                                  log::add('inter2N', 'info', 'key pressed:' . $params['key']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"dernier_bouton");
+                                  $cmd->event($params['key']);
+                                  break;
+                                case "CodeEntered":
+                                  log::add('inter2N', 'info', 'code entered:' . $params['code']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"Code_entree");
+                                  $cmd->event($params['code']);
+                                  break;
+                                case "CardEntered":
+                                  log::add('inter2N', 'debug', 'card entered:' . $params['uid']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"Lecteur_carte");
+                                  $cmd->event($params['uid']);
+                                  break;
+                                case "SwitchStateChanged":
+                                  log::add('inter2N', 'debug', 'etat switch:' . $params['switch'] . ' State :'. $params['state']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'SWITCH_'.$params['switch']);
+                                  if($params['state'] == true){
+                                       $cmd->event(1);
+                                       $eqLogic->refreshWidget();
+                                  } else{
+                                       $cmd->event(0);
+                                       $eqLogic->refreshWidget();
+                                  }
+                                  break;
+                                  case "InputChanged":
+                                    log::add('inter2N', 'debug', 'etat input:' . $params['port'] . ' State :'. $params['state']);
+                                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id, $params['port']);
+                                    if($params['state'] == true){
+                                         $cmd->event(1);
+                                         $eqLogic->refreshWidget();
+                                    } else{
+                                         $cmd->event(0);
+                                         $eqLogic->refreshWidget();
+                                    }
+                                    break;
+
+                                    case "OutputChanged":
+                                      log::add('inter2N', 'debug', 'etat output:' . $params['port'] . ' State :'. $params['state']);
+                                      $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id, $params['port']);
+                                      if($params['state'] == true){
+                                           $cmd->event(1);
+                                           $eqLogic->refreshWidget();
+                                      } else{
+                                           $cmd->event(0);
+                                           $eqLogic->refreshWidget();
+                                      }
+
+                                      break;
+
+                                case "CallStateChanged":
+                                  log::add('inter2N', 'debug', 'call :' . $params['direction'] . ' State :'. $params['state']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"Appel");
+                                  $cmd->event($params['state']);
+                                  $eqLogic->refreshWidget();
+                                  break;
+                                case "TamperSwitchActivated":
+                                  log::add('inter2N', 'debug', 'TamperSwitchActivated :' . $params['state']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'Arrachement_Interphone');
+                                  if($params['state'] == "in"){
+                                  	$cmd->event(1);
+                                    $eqLogic->refreshWidget();
+                                  }else{
+                                      $cmd->event(0);
+                                    $eqLogic->refreshWidget();
+                                  }
+                                  break;
+                                case "UnauthorizedDoorOpen":
+                                  log::add('inter2N', 'debug', 'UnauthorizedDoorOpen :' . $params['state']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'ouverture_non_autorisee');
+                                  if($params['state'] == "in"){
+                                      $cmd->event(1);
+                                    $eqLogic->refreshWidget();
+                                  }else{
+                                      $cmd->event(0);
+                                    $eqLogic->refreshWidget();
+                                  }
+                                  break;
+                                case "DoorOpenTooLong":
+                                  log::add('inter2N', 'debug', 'DoorOpenTooLong :' . $params['state']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'Porte_ouverte_trop_longtemps');
+                                  if($params['state'] == "in"){
+                                      $cmd->event(1);
+                                    $eqLogic->refreshWidget();
+                                  }else{
+                                      $cmd->event(0);
+                                    $eqLogic->refreshWidget();
+                                  }
+                                  break;
+                                case "FingerEntered":
+                                  log::add('inter2N', 'debug', 'FingerEntered :' . $params['direction'] . ' - UID : '.$params['uuid']. ' - valid :'.$params['valid']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"empreinte");
+                                  $cmd->event($params['uuid']);
+                                  $eqLogic->refreshWidget();
+                                  break;
+                                case "MobKeyEntered":
+                                  log::add('inter2N', 'debug', 'MobKeyEntered :' . $params['direction'] . ' - UID : '.$params['authid']. ' - valid :'.$params['valid']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"Bluetooth_Tel_Mobile");
+                                  $cmd->event($params['authid']);
+                                  $eqLogic->refreshWidget();
+                                  break;
+                                case "DoorStateChanged":
+                                  log::add('inter2N', 'debug', 'DoorStateChanged :' . $params['state']);
+                                  $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'Etat_porte');
+                                  if($params['state'] == "opened"){
+                                      $cmd->event(1);
+                                    $eqLogic->refreshWidget();
+                                  }else{
+                                      $cmd->event(0);
+                                    $eqLogic->refreshWidget();
+                                  }
+                                  break;
+                  }
+
                     }
-
-                    break;
-                  case "NoiseDetected":
-                    log::add('inter2N', 'debug', 'Noise detected:' . $params['state']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'Bruit_Detecte');
-                    if($params['state'] == "in"){
-                        $cmd->event(1);
-                        $eqLogic->refreshWidget();
-                        log::add('inter2N', 'debug', 'NoiseDetected');
-                    }elseif($params['state'] == "out"){
-                        $cmd->event(0);
-                        $eqLogic->refreshWidget();
-                    }else{
-                        $cmd->event(0);
+                    if(@$state === false){
+                        array_push($arrayStatusSwitches, '0');
+                    }elseif(@$state === true){
+                        array_push($arrayStatusSwitches, '1');
                     }
-                    break;
-                  case "KeyPressed":
-                    log::add('inter2N', 'info', 'key pressed:' . $params['key']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"dernier_bouton");
-                    $cmd->event($params['key']);
-                    break;
-                  case "CodeEntered":
-                    log::add('inter2N', 'info', 'code entered:' . $params['code']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"Code_entree");
-                    $cmd->event($params['code']);
-                    break;
-                  case "CardEntered":
-                    log::add('inter2N', 'debug', 'card entered:' . $params['uid']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"Lecteur_carte");
-                    $cmd->event($params['uid']);
-                    break;
-                  case "SwitchStateChanged":
-                    log::add('inter2N', 'debug', 'etat switch:' . $params['switch'] . ' State :'. $params['state']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'SWITCH_'.$params['switch']);
-                    if($params['state'] == true){
-                         $cmd->event(1);
-                         $eqLogic->refreshWidget();
-                    } else{
-                         $cmd->event(0);
-                         $eqLogic->refreshWidget();
-                    }
-
-                    break;
-                    case "InputChanged":
-                      log::add('inter2N', 'debug', 'etat input:' . $params['port'] . ' State :'. $params['state']);
-                      $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id, $params['port']);
-                      if($params['state'] == true){
-                           $cmd->event(1);
-                           $eqLogic->refreshWidget();
-                      } else{
-                           $cmd->event(0);
-                           $eqLogic->refreshWidget();
-                      }
-                      break;
-
-                      case "OutputChanged":
-                        log::add('inter2N', 'debug', 'etat input:' . $params['port'] . ' State :'. $params['state']);
-                        $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id, $params['port']);
-                        if($params['state'] == true){
-                             $cmd->event(1);
-                             $eqLogic->refreshWidget();
-                        } else{
-                             $cmd->event(0);
-                             $eqLogic->refreshWidget();
-                        }
-
-                        break;
-
-
-
-
-                  case "CallStateChanged":
-                    log::add('inter2N', 'debug', 'call :' . $params['direction'] . ' State :'. $params['state']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"Appel");
-                    $cmd->event($params['state']);
-                    $eqLogic->refreshWidget();
-                    break;
-                  case "TamperSwitchActivated":
-                    log::add('inter2N', 'debug', 'TamperSwitchActivated :' . $params['state']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'Arrachement_Interphone');
-                    if($params['state'] == "in"){
-                    	$cmd->event(1);
-                      $eqLogic->refreshWidget();
-                    }else{
-                        $cmd->event(0);
-                      $eqLogic->refreshWidget();
-                    }
-                    break;
-                  case "UnauthorizedDoorOpen":
-                    log::add('inter2N', 'debug', 'UnauthorizedDoorOpen :' . $params['state']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'ouverture_non_autorisee');
-                    if($params['state'] == "in"){
-                        $cmd->event(1);
-                      $eqLogic->refreshWidget();
-                    }else{
-                        $cmd->event(0);
-                      $eqLogic->refreshWidget();
-                    }
-                    break;
-                  case "DoorOpenTooLong":
-                    log::add('inter2N', 'debug', 'DoorOpenTooLong :' . $params['state']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'Porte_ouverte_trop_longtemps');
-                    if($params['state'] == "in"){
-                        $cmd->event(1);
-                      $eqLogic->refreshWidget();
-                    }else{
-                        $cmd->event(0);
-                      $eqLogic->refreshWidget();
-                    }
-                    break;
-                  case "FingerEntered":
-                    log::add('inter2N', 'debug', 'FingerEntered :' . $params['direction'] . ' - UID : '.$params['uuid']. ' - valid :'.$params['valid']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"empreinte");
-                    $cmd->event($params['uuid']);
-                    $eqLogic->refreshWidget();
-                    break;
-                  case "MobKeyEntered":
-                    log::add('inter2N', 'debug', 'MobKeyEntered :' . $params['direction'] . ' - UID : '.$params['authid']. ' - valid :'.$params['valid']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,"Bluetooth_Tel_Mobile");
-                    $cmd->event($params['authid']);
-                    $eqLogic->refreshWidget();
-                    break;
-                  case "DoorStateChanged":
-                    log::add('inter2N', 'debug', 'DoorStateChanged :' . $params['state']);
-                    $cmd = cmd::byEqLogicIdAndLogicalId($eqLogic_id,'Etat_porte');
-                    if($params['state'] == "opened"){
-                        $cmd->event(1);
-                      $eqLogic->refreshWidget();
-                    }else{
-                        $cmd->event(0);
-                      $eqLogic->refreshWidget();
-                    }
-                    break;
-              }
-
-            }
-            if(@$state === false){
-                array_push($arrayStatusSwitches, '0');
-            }elseif(@$state === true){
-                array_push($arrayStatusSwitches, '1');
-            }
-           /* inter2N::refreshDash($eqLogic);*/
-          /*  log::add('inter2N', 'debug', 'responsForEventSwitch:' . json_encode($event));*/
-            log::add('inter2N', 'debug', 'arrStatusSwitch' . json_encode($arrayStatusSwitches));
-        }
+                   /* inter2N::refreshDash($eqLogic);*/
+                  /*  log::add('inter2N', 'debug', 'responsForEventSwitch:' . json_encode($event));*/
+                    log::add('inter2N', 'debug', 'arrStatusSwitch' . json_encode($arrayStatusSwitches));
+             }
     }
 
     public function subscribe(){
@@ -421,7 +416,6 @@ class inter2N extends eqLogic {
             }
         }
         return $arrayIoSwitches;
-        /*return $responsForCheckIo;*/
     }
 
 
@@ -431,18 +425,18 @@ class inter2N extends eqLogic {
             $protocole = $this->getConfiguration('protocole');
             $ip = $this->getConfiguration('ip');
 
-        if(empty($username) ||  empty($password) || empty($ip) ){
-            return;
-        } else {
-            $startRequest = $protocole . '://' . $username .':'. $password .'@'. $ip;
-        }
-        $http = new com_http( $startRequest . $string);
+            if(empty($username) ||  empty($password) || empty($ip) ){
+                return;
+            } else {
+                $startRequest = $protocole . '://' . $username .':'. $password .'@'. $ip;
+            }
+            $http = new com_http( $startRequest . $string);
 
-        if(empty($startRequest)){
-        } else {
-            $request = $http->exec();
-            return $request;
-        }
+            if(empty($startRequest)){
+            } else {
+                $request = $http->exec();
+                return $request;
+            }
 
     }
 
@@ -464,7 +458,7 @@ class inter2N extends eqLogic {
             $xmlB->AccessControl->AccessPoint[0]->Signalization = $test;
             $xmlB->AccessControl->AccessPoint[1]->Signalization = $test;
 
-           foreach($arraymastercode as $switch=>$array_switch){
+            foreach($arraymastercode as $switch=>$array_switch){
                    $len_array_values = count($array_switch);
                    for($j=0; $j < $len_array_values; $j++){
                       if($switch != ''){
@@ -472,11 +466,9 @@ class inter2N extends eqLogic {
                         }
                    }
                    $i++;
-
              }
 
             $xml_to_upload = $xmlB->asXML();
-
 
             if(empty($username) ||  empty($password) || empty($ip) ){
                 return;
@@ -490,12 +482,11 @@ class inter2N extends eqLogic {
             if(empty($startRequest)){
             } else {
                 $request = $http->exec();
-                /*$respons = json_decode($request, true);*/
+
                 return $request;
             }
 
-       log::add('inter2N', 'debug', 'STATUS_REQUETE_CONFIG ' . json_encode($request));
-        log::add('inter2N', 'debug', 'STATUS_REQUETE_CONFIG ' . $request);
+        log::add('inter2N', 'debug', 'STATUS_REQUETE_CONFIG ' . json_encode($request));
 
   }
 
@@ -647,18 +638,18 @@ class inter2N extends eqLogic {
 
 
         public function preUpdate() {
-            if ($this->getConfiguration('ip') == '') {
-			     throw new Exception(__('L\'adresse IP de l\'équipement ne peut être vide', __FILE__));
-		     }
-           if ($this->getConfiguration('username') == '') {
-			     throw new Exception(__('L\'username de l\'équipement ne peut être vide', __FILE__));
-		     }
-           if ($this->getConfiguration('password') == '') {
-			     throw new Exception(__('Le mot de passe de l\'équipement ne peut être vide', __FILE__));
-		     }
-
-
+                if ($this->getConfiguration('ip') == '') {
+    			     throw new Exception(__('L\'adresse IP de l\'équipement ne peut être vide', __FILE__));
+    		     }
+               if ($this->getConfiguration('username') == '') {
+    			     throw new Exception(__('L\'username de l\'équipement ne peut être vide', __FILE__));
+    		     }
+               if ($this->getConfiguration('password') == '') {
+    			     throw new Exception(__('Le mot de passe de l\'équipement ne peut être vide', __FILE__));
+    		     }
         }
+
+
 
         public function postUpdate() {
 
@@ -951,7 +942,7 @@ class inter2N extends eqLogic {
                   $option = $id[0];
                 }
 
-            } elseif($pos == false){
+            }elseif($pos == false){
                 $findmeOff = 'Off';
                 $posOff = strpos($mystring, $findmeOff);
                 if($posOff !== false){
@@ -963,8 +954,8 @@ class inter2N extends eqLogic {
                     }else{
                       $option = $id[0];
                     }
-                }
-            } else {
+                 }
+            }else{
                 return;
             }
 
@@ -995,45 +986,6 @@ class inter2N extends eqLogic {
                     $eqLogic->action_iO($typeiO, $exception);
                     return;
                 break;
-
-                /*case $option.'_On':
-                    $action = 'output';
-                    $exception = 0;
-                    $option = 1;
-                    $eqLogic->action($action, $option, $exception);
-                    return;
-                break;
-
-                case 'output_off':
-                    log::add('inter2N', 'debug', 'passe');
-                    $action = 'output';
-                    $exception = 0;
-                    $option = 0;
-                    $eqLogic->action($action, $option, $exception);
-                    return;
-                break;
-
-                case 'relay_on':
-                    $action = 'relay';
-                    $exception = 0;
-                    $eqLogic->action($action, $option, $exception);
-                    return;
-                break;
-
-                case 'relay_off':
-                    $action = 'relay';
-                    $exception = 0;
-                    $option = 0;
-                    $eqLogic->action($action, $option, $exception);
-                    return;
-                break;
-
-                case 'restart_sys':
-                    $action = 'restart';
-                    $exception = 0;
-                    $eqLogic->action($action, $option, $exception);
-                    return;
-                break;*/
 
             };
         }
