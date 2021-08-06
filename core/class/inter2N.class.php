@@ -706,9 +706,8 @@ class inter2N extends eqLogic {
                     $cmd->setSubType('other');
                     $cmd->setEqLogic_id($this->getId());
                     $cmd->setDisplay('generic_type', 'SWITCH_OFF');
-                    $cmd->setTemplate('dashboard', 'circle');
-
-
+                    $cmd->setTemplate('dashboard','inter2N::actionswitch');
+                    $cmd->setOrder(1);
                     $cmd->setValue($stateId);
                     $cmd->save();
 
@@ -724,9 +723,9 @@ class inter2N extends eqLogic {
                     $cmd->setSubType('other');
                     $cmd->setEqLogic_id($this->getId());
                     $cmd->setDisplay('generic_type', 'SWITCH_ON');
-                    $cmd->setTemplate('dashboard', 'circle');
-
-                     $cmd->setValue($stateId);
+                    $cmd->setTemplate('dashboard','inter2N::actionswitch');
+                    $cmd->setOrder(2);
+                    $cmd->setValue($stateId);
                     $cmd->save();
             }
 
@@ -760,8 +759,8 @@ class inter2N extends eqLogic {
                     $cmd->setSubType('other');
                     $cmd->setEqLogic_id($this->getId());
                     $cmd->setDisplay('generic_type', 'SWITCH_OFF');
-                    $cmd->setTemplate('dashboard', 'circle');
-
+                    $cmd->setTemplate('dashboard','inter2N::actionswitch');
+                    $cmd->setOrder(3);
 
                     $cmd->setValue($stateId);
                     $cmd->save();
@@ -778,8 +777,8 @@ class inter2N extends eqLogic {
                     $cmd->setSubType('other');
                     $cmd->setEqLogic_id($this->getId());
                     $cmd->setDisplay('generic_type', 'SWITCH_ON');
-                    $cmd->setTemplate('dashboard', 'circle');
-
+					$cmd->setTemplate('dashboard','inter2N::actionswitch');
+                    $cmd->setOrder(4);
                      $cmd->setValue($stateId);
                     $cmd->save();
             }
@@ -883,6 +882,24 @@ class inter2N extends eqLogic {
                 }
             }
         }
+  
+  
+  public static function templateWidget(){
+    
+      $return = array('info' => array('string' => array()));
+	  $return['action']['other']['actionswitch'] = array(
+		'template' => 'tmplimg',
+		'replace' => array(
+			'#_img_light_on_#' => '<img class=\'img-responsive" src="plugins/inter2N/data/img/defaut_on.png\' width="50" height="50">',
+			'#_img_light_off_#' => '<img class=\'img-responsive" src="plugins/inter2N/data/img/defaut_off.png\' width="50" height="50">',
+            '#_img_dark_on_#' => '<img class=\'img-responsive" src="plugins/inter2N/data/img/defaut_on.png\' width="50" height="50">',
+			'#_img_dark_off_#' => '<img class=\'img-responsive" src="plugins/inter2N/data/img/defaut_off.png\' width="50" height="50">'
+			)
+	);
+	return $return;
+    
+    
+  }
 
         //  Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
 
