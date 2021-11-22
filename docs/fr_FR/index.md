@@ -1,6 +1,6 @@
 # 2N
 
-#Description 
+#Description
 
 Plugin pour les interphones 2N.
 
@@ -53,7 +53,7 @@ Configurer l'utilisateur :
 
 
 Une fois cela fait, vous pouvez créer votre équipement dans Jeedom avec le mot de passe et le nom d'utilisateur du compte 2n configuré avec les droits API (voir plus haut).
-Dans les menus deroulants, choisir les modules installés ou non sur votre interphone : Camera, Lecteur d'empreintes digitales, Module Anti arrachement.
+Dans les menus déroulants, choisir les modules installés ou non sur votre interphone : Camera, Lecteur d'empreintes digitales, Module Anti arrachement.
 
 
 ![config](../images/2nCrea.png)
@@ -67,7 +67,7 @@ Vous pouvez séparer les codes par une virgule pour attribuer plusieurs codes pa
 >
 > Les codes doivent être de type numerique
 
-Vous pouvez egalement changer le type de signal quand une carte non valide est passée devant le lecteur (Simple Beep, Beep + Lumiere, ou Aucun).
+Vous pouvez également changer le type de signal quand une carte non valide est passée devant le lecteur (Simple Beep, Beep + Lumière, ou Aucun).
 
 ![config](../images/2nSuperUser.png)
 
@@ -87,12 +87,12 @@ Si vous avez une camera sur votre équipement, un objet camera sera créé via l
 
 
 
-# Commandes et informations sur le Dashboard 
+# Commandes et informations sur le Dashboard
 
 
 Etat :
 
-- Par defaut, les états des switchs sont liés a leur commandes action; en cliquant sur le switch, cela active le switch (on verra l'icone du switch changer de couleur).
+- Par défaut, les états des switchs sont liés a leur commandes action; en cliquant sur le switch, cela active le switch (on verra l'icone du switch changer de couleur).
 - L'état des switchs remonte ceux disponibles sur votre appareil (de 1 à 4).
 
 
@@ -111,7 +111,7 @@ Etat :
 - Code entrée : fait apparaitre le code tapé sur votre interphone.
 
 
-- dernier_bouton appuye : fait apparaitre le dernier appuyé sur votre interphone.
+- dernier_bouton appuyé : fait apparaitre le dernier appuyé sur votre interphone.
 
 - Empreinte : fait apparaitre l'Id de la personne enregistrée (pour les équipements équipés du module d'empreinte digitales).
 
