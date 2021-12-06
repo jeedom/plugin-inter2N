@@ -60,7 +60,7 @@ class inter2N extends eqLogic {
             throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
         }
         log::add(__CLASS__, 'debug', 'subscribe id ' . $idSubs);
-        foreach (eqLogic::byType('inter2N') as $eqLogic) {
+        foreach (eqLogic::byType('inter2N', true) as $eqLogic) {
             $idSubs = $eqLogic->subscribe();
             $eqLogic->setConfiguration('idSubs', $idSubs);
             $eqLogic->getModel();
