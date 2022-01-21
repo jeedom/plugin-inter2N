@@ -375,7 +375,7 @@ class inter2N extends eqLogic {
     }
 
     public function logPull($id){
-        $stringForLog = "/api/log/pull?id=" . $id;
+        $stringForLog = "/api/log/pull?id=" . $id."&timeout=20";
         $responsForlog = $this->resquest($stringForLog);
         log::add(__CLASS__, 'debug', $stringForLog . ' ' . json_encode($responsForlog));
         return $responsForlog;
