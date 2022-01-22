@@ -1,0 +1,76 @@
+{
+    "plugins\/inter2N\/desktop\/modal\/inter2NModal.php": {
+        "401 - Accès non autorisé": "401 - Unbefugter Zugriff"
+    },
+    "plugins\/inter2N\/desktop\/php\/inter2N.php": {
+        "401 - Accès non autorisé": "401 - Unbefugter Zugriff",
+        "Gestion": "Verwaltung",
+        "Ajouter": "Hinzufügen",
+        "Configuration": "Aufbau",
+        "Mes equipements": "Meine Ausrüstung",
+        "Rechercher": "Suche",
+        "Configuration avancée": "Erweiterte Konfiguration",
+        "Dupliquer": "Duplikat",
+        "Sauvegarder": "Speichern",
+        "Supprimer": "Entfernen",
+        "Equipement": "Ausrüstung",
+        "Commandes": "Aufträge",
+        "Nom de l'équipement": "Ausrüstungsname",
+        "Objet parent": "Übergeordnetes Objekt",
+        "Aucun": "Nein",
+        "Catégorie": "Kategorie",
+        "Activer": "Aktivieren Sie",
+        "Visible": "Sichtbar",
+        "Nom d'utilisateur": "Nutzername",
+        "Mot de passe": "Passwort",
+        "Code SuperUtilisateur Switch1": "SuperUser-Code-Schalter1",
+        "Code SuperUtilisateur Switch2": "SuperUser-Code-Schalter2",
+        "Code SuperUtilisateur Switch3": "SuperUser-Code-Schalter3",
+        "Code SuperUtilisateur Switch4": "SuperUser-Code-Schalter4",
+        "Module Empreinte Digitale": "Fingerabdruck-Modul",
+        "Camera": "Kamera",
+        "Interrupteur de protection Anti-Ouverture": "Öffnungsschutzschalter",
+        "Type de sonnerie validation Carte": "Ringtyp-Validierungskarte",
+        "Ajouter une commande": "Bestellung hinzufügen",
+        "Id": "Ich würde",
+        "Nom": "Nachname",
+        "Type": "Art",
+        "Paramètres": "Die Einstellungen",
+        "Options": "Optionen",
+        "Action": "Aktion"
+    },
+    "plugins\/inter2N\/desktop\/js\/inter2N.js": {
+        "Nom de la commande": "Bestellname",
+        "Commande information liée": "Befehlsbezogene Informationen",
+        "Aucune": "Irgendein",
+        "Icône": "Symbol",
+        "Min.": "Mindest.",
+        "Max.": "Max.",
+        "Unité": "Einheit",
+        "Afficher": "Anzeige",
+        "Historiser": "Historisieren",
+        "Inverser": "Umkehren"
+    },
+    "plugins\/inter2N\/core\/ajax\/inter2N.ajax.php": {
+        "401 - Accès non autorisé": "401 - Unbefugter Zugriff",
+        "Aucune méthode correspondante à : ": "Keine Methode entsprechend:"
+    },
+    "plugins\/inter2N\/core\/class\/inter2N.class.php": {
+        "Veuillez vérifier la configuration": "Bitte überprüfen Sie die Konfiguration",
+        "Tâche cron introuvable": "Cronjob nicht gefunden",
+        "L\\'adresse IP de l\\'équipement ne peut être vide": "Die IP-Adresse des Geräts darf nicht leer sein",
+        "L\\'username de l\\'équipement ne peut être vide": "Der Gerätebenutzername darf nicht leer sein",
+        "Le mot de passe de l\\'équipement ne peut être vide": "Das Gerätepasswort darf nicht leer sein",
+        "Rafraichir": "Aktualisierung",
+        "$port": "$ port",
+        "$port.'_off": "$ port .'_ aus",
+        "$port.'_On": "$ port .'_ Ein",
+        "Etat SWITCH_' . $switch": "SCHALTER_ 'Zustand. $ wechseln",
+        "SWITCH_'.$switch.'_off": "SCHALTEN _ '. $ Schalter .'_ aus",
+        "SWITCH_'.$switch.'_on": "SCHALTEN _ '. $ Schalter .'_ ein",
+        "$nameCmdPlugin": "$ nameCmdPlugin"
+    },
+    "info.json": {
+        "Plugin pour gérer les interphones inter2N": "Plugin zur Verwaltung von Inter2N-Gegensprechanlagen"
+    }
+}

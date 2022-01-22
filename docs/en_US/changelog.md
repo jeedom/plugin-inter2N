@@ -3,9 +3,10 @@
 
 >**IMPORTANT**
 >
->If there is no information about the update, it is because it concerns only the update of documentation, translation or text
+>As a reminder, if there is no information on the update, it is because it concerns only the update of documentation, translation or text
 
-# 19/07/2021
+# 07/19/2021
 
-- Added superuser codes
-- Adding change ringtone not validation
+- Add superuser codes
+- Add ringer change not validated
+

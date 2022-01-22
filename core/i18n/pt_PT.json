@@ -1,0 +1,76 @@
+{
+    "plugins\/inter2N\/desktop\/modal\/inter2NModal.php": {
+        "401 - Accès non autorisé": "401 - Acesso não autorizado"
+    },
+    "plugins\/inter2N\/desktop\/php\/inter2N.php": {
+        "401 - Accès non autorisé": "401 - Acesso não autorizado",
+        "Gestion": "Gestão",
+        "Ajouter": "Adicionar",
+        "Configuration": "Configuração",
+        "Mes equipements": "Meu equipamento",
+        "Rechercher": "Procurar",
+        "Configuration avancée": "Configuração avançada",
+        "Dupliquer": "Duplicado",
+        "Sauvegarder": "Salve ",
+        "Supprimer": "Remover",
+        "Equipement": "Equipamento",
+        "Commandes": "Pedidos",
+        "Nom de l'équipement": "Nome do equipamento",
+        "Objet parent": "Objeto pai",
+        "Aucun": "Não",
+        "Catégorie": "Categoria",
+        "Activer": "Ativar",
+        "Visible": "Visível",
+        "Nom d'utilisateur": "Nome do usuário",
+        "Mot de passe": "Senha",
+        "Code SuperUtilisateur Switch1": "Chave de código de superusuário 1",
+        "Code SuperUtilisateur Switch2": "Chave de código de superusuário 2",
+        "Code SuperUtilisateur Switch3": "Chave de código de superusuário 3",
+        "Code SuperUtilisateur Switch4": "Chave de código de superusuário 4",
+        "Module Empreinte Digitale": "Módulo de impressão digital",
+        "Camera": "Câmera",
+        "Interrupteur de protection Anti-Ouverture": "Chave de proteção anti-abertura",
+        "Type de sonnerie validation Carte": "Cartão de validação de tipo de anel",
+        "Ajouter une commande": "Adicionar um pedido",
+        "Id": "Identidade",
+        "Nom": "Sobrenome",
+        "Type": "Modelo",
+        "Paramètres": "Definições",
+        "Options": "Opções",
+        "Action": "Açao"
+    },
+    "plugins\/inter2N\/desktop\/js\/inter2N.js": {
+        "Nom de la commande": "Nome do pedido",
+        "Commande information liée": "Informações relacionadas ao comando",
+        "Aucune": "Algum",
+        "Icône": "Ícone",
+        "Min.": "Min.",
+        "Max.": "Máx.",
+        "Unité": "Unidade",
+        "Afficher": "Exibição",
+        "Historiser": "Historize",
+        "Inverser": "Marcha ré"
+    },
+    "plugins\/inter2N\/core\/ajax\/inter2N.ajax.php": {
+        "401 - Accès non autorisé": "401 - Acesso não autorizado",
+        "Aucune méthode correspondante à : ": "Nenhum método correspondente a:"
+    },
+    "plugins\/inter2N\/core\/class\/inter2N.class.php": {
+        "Veuillez vérifier la configuration": "Por favor, verifique a configuração",
+        "Tâche cron introuvable": "Cron job não encontrado",
+        "L\\'adresse IP de l\\'équipement ne peut être vide": "O endereço IP do equipamento não pode estar vazio",
+        "L\\'username de l\\'équipement ne peut être vide": "O nome de usuário do equipamento não pode estar vazio",
+        "Le mot de passe de l\\'équipement ne peut être vide": "A senha do equipamento não pode estar vazia",
+        "Rafraichir": "Atualizar",
+        "$port": "$ port",
+        "$port.'_off": "$ port .'_ off",
+        "$port.'_On": "$ port .'_ Ligado",
+        "Etat SWITCH_' . $switch": "Estado SWITCH_ '. $ switch",
+        "SWITCH_'.$switch.'_off": "SWITCH _ '. $ Switch .'_ off",
+        "SWITCH_'.$switch.'_on": "SWITCH _ '. $ Switch .'_ ligado",
+        "$nameCmdPlugin": "$ nameCmdPlugin"
+    },
+    "info.json": {
+        "Plugin pour gérer les interphones inter2N": "Plugin para gerenciar interfones inter2N"
+    }
+}

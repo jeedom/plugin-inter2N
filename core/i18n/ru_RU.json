@@ -1,0 +1,76 @@
+{
+    "plugins\/inter2N\/desktop\/modal\/inter2NModal.php": {
+        "401 - Accès non autorisé": "401 - Accès non autorisé"
+    },
+    "plugins\/inter2N\/desktop\/php\/inter2N.php": {
+        "401 - Accès non autorisé": "401 - Accès non autorisé",
+        "Gestion": "Gestion",
+        "Ajouter": "Ajouter",
+        "Configuration": "Configuration",
+        "Mes equipements": "Mes equipements",
+        "Rechercher": "Rechercher",
+        "Configuration avancée": "Configuration avancée",
+        "Dupliquer": "Dupliquer",
+        "Sauvegarder": "Sauvegarder",
+        "Supprimer": "Supprimer",
+        "Equipement": "Equipement",
+        "Commandes": "Commandes",
+        "Nom de l'équipement": "Nom de l'équipement",
+        "Objet parent": "Objet parent",
+        "Aucun": "Aucun",
+        "Catégorie": "Catégorie",
+        "Activer": "Activer",
+        "Visible": "Visible",
+        "Nom d'utilisateur": "Nom d'utilisateur",
+        "Mot de passe": "Mot de passe",
+        "Code SuperUtilisateur Switch1": "Code SuperUtilisateur Switch1",
+        "Code SuperUtilisateur Switch2": "Code SuperUtilisateur Switch2",
+        "Code SuperUtilisateur Switch3": "Code SuperUtilisateur Switch3",
+        "Code SuperUtilisateur Switch4": "Code SuperUtilisateur Switch4",
+        "Module Empreinte Digitale": "Module Empreinte Digitale",
+        "Camera": "Camera",
+        "Interrupteur de protection Anti-Ouverture": "Interrupteur de protection Anti-Ouverture",
+        "Type de sonnerie validation Carte": "Type de sonnerie validation Carte",
+        "Ajouter une commande": "Ajouter une commande",
+        "Id": "Id",
+        "Nom": "Nom",
+        "Type": "Type",
+        "Paramètres": "Paramètres",
+        "Options": "Options",
+        "Action": "Action"
+    },
+    "plugins\/inter2N\/desktop\/js\/inter2N.js": {
+        "Nom de la commande": "Nom de la commande",
+        "Commande information liée": "Commande information liée",
+        "Aucune": "Aucune",
+        "Icône": "Icône",
+        "Min.": "Min.",
+        "Max.": "Max.",
+        "Unité": "Unité",
+        "Afficher": "Afficher",
+        "Historiser": "Historiser",
+        "Inverser": "Inverser"
+    },
+    "plugins\/inter2N\/core\/ajax\/inter2N.ajax.php": {
+        "401 - Accès non autorisé": "401 - Accès non autorisé",
+        "Aucune méthode correspondante à : ": "Aucune méthode correspondante à :"
+    },
+    "plugins\/inter2N\/core\/class\/inter2N.class.php": {
+        "Veuillez vérifier la configuration": "Veuillez vérifier la configuration",
+        "Tâche cron introuvable": "Tâche cron introuvable",
+        "L\\'adresse IP de l\\'équipement ne peut être vide": "L\\'adresse IP de l\\'équipement ne peut être vide",
+        "L\\'username de l\\'équipement ne peut être vide": "L\\'username de l\\'équipement ne peut être vide",
+        "Le mot de passe de l\\'équipement ne peut être vide": "Le mot de passe de l\\'équipement ne peut être vide",
+        "Rafraichir": "Rafraichir",
+        "$port": "$port",
+        "$port.'_off": "$port.'_off",
+        "$port.'_On": "$port.'_On",
+        "Etat SWITCH_' . $switch": "Etat SWITCH_' . $switch",
+        "SWITCH_'.$switch.'_off": "SWITCH_'.$switch.'_off",
+        "SWITCH_'.$switch.'_on": "SWITCH_'.$switch.'_on",
+        "$nameCmdPlugin": "$nameCmdPlugin"
+    },
+    "info.json": {
+        "Plugin pour gérer les interphones inter2N": "Plugin pour gérer les interphones inter2N"
+    }
+}
