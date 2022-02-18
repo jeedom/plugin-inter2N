@@ -182,7 +182,9 @@ class inter2N extends eqLogic {
 
 
 
-   public static function switchesStatus($eqLogic_id){
+   public static function switchesStatus($eqLogic_id){    
+      
+      
         	$eqLogic = eqLogic::byId($eqLogic_id);
       		if(!is_object($eqLogic)){
             return;
@@ -192,6 +194,9 @@ class inter2N extends eqLogic {
                 log::add(__CLASS__, 'debug', 'L identifiant de l equipement est vide, redemarrez le demon');
             }else {
                 $responsForLog = $eqLogic->logPull($id);
+                if($responsForLog == 'false'){
+                  return;                 
+                }
                 //Create an array with status of Output
                 $arrayStatusSwitches = array();
                 foreach ($responsForLog as $value){
@@ -355,7 +360,7 @@ class inter2N extends eqLogic {
     }
 
     public function subscribe(){
-        $stringForSubscribe = "/api/log/subscribe?&include=-10";
+        $stringForSubscribe = "/api/log/subscribe?-10";
         $responsForSubscribe = $this->resquest($stringForSubscribe);
         foreach($responsForSubscribe as $value){
             @$id = $value['id'];
@@ -375,8 +380,33 @@ class inter2N extends eqLogic {
     }
 
     public function logPull($id){
-        $stringForLog = "/api/log/pull?id=" . $id."&timeout=20";
-        $responsForlog = $this->resquest($stringForLog);
+        $timeoutchoice = $this->getConfiguration('timeout',20);
+        if(is_numeric($timeoutchoice) == false){
+            message::add(__CLASS__, 'Le timeout renseigné n\'est pas au format numerique. Processus arreté', 'tiemout', 'timeout2N');  
+            sleep(10);
+            message::removeAll(__CLASS__, 'timeout2N');
+            $responsForlog = 'false';
+            return $responsForlog;
+          
+        }
+        $stringForLog = "/api/log/pull?id={$id}&timeout={$timeoutchoice}"; 
+            $username = $this->getConfiguration('username');
+            $password = $this->getConfiguration('password');
+            $protocole = $this->getConfiguration('protocole');
+            $ip = $this->getConfiguration('ip');
+
+        if(empty($username) ||  empty($password) || empty($ip) ){
+            return;
+        } else {
+            $startRequest =  $protocole . '://' . $username .':'. $password .'@'. $ip;
+        }
+        $http = new com_http( $startRequest . $stringForLog);
+
+        if(empty($startRequest)){
+        } else {
+            $request = $http->exec($timeoutchoice);
+            $responsForlog = json_decode($request, true);
+        }
         log::add(__CLASS__, 'debug', $stringForLog . ' ' . json_encode($responsForlog));
         return $responsForlog;
     }
@@ -442,7 +472,6 @@ class inter2N extends eqLogic {
 
 
   public function config_xml_put($arraymastercode, $stringForConfig, $xml){
-
             $username = $this->getConfiguration('username');
             $password = $this->getConfiguration('password');
             $protocole = $this->getConfiguration('protocole');
@@ -462,7 +491,7 @@ class inter2N extends eqLogic {
                    $len_array_values = count($array_switch);
                    for($j=0; $j < $len_array_values; $j++){
                       if($switch != ''){
-                         $xmlB->Switches->Switch[$i]->Code[$j]->Code = $array_switch[$j];
+                         $xmlB->Switches->Switch[$i]->Code[$j]->Code = intval($array_switch[$j]);
                         }
                    }
                    $i++;
@@ -482,11 +511,10 @@ class inter2N extends eqLogic {
             if(empty($startRequest)){
             } else {
                 $request = $http->exec();
-
-                return $request;
+                 log::add(__CLASS__, 'debug', 'STATUS_REQUETE_CONFIG ' . json_encode($request));
+               /* return $request;*/
             }
 
-        log::add(__CLASS__, 'debug', 'STATUS_REQUETE_CONFIG ' . json_encode($request));
 
   }
 
@@ -617,12 +645,13 @@ class inter2N extends eqLogic {
             $this->createCamera();
             $this->crea_cmd();
             $xml = $this->getXmlConfig($stringForConfig);
-
+            log::add(__CLASS__, 'debug', 'CODE1 ' .$this->getConfiguration('mastercodeSwitch1'));
+           /* log::add(__CLASS__, 'debug', 'XML ' .json_encode($xml));*/
             $arraystring1 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch1'));
             $arraystring2 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch2'));
             $arraystring3 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch3'));
             $arraystring4 = self::sanitize_strings($this->getConfiguration('mastercodeSwitch4'));
-
+             log::add(__CLASS__, 'debug', 'STRING1 ' .json_encode($arraystring1));
               $array_mastercodes = array(
                             'Switch1' => $arraystring1,
                             'Switch2' => $arraystring2,
@@ -890,7 +919,7 @@ class inter2N extends eqLogic {
 		  'replace' => array(
 			'#_img_light_on_#' => '<img class=\'img-responsive" src="plugins/inter2N/data/img/defaut_on.png\' width="50" height="50">',
 			'#_img_light_off_#' => '<img class=\'img-responsive" src="plugins/inter2N/data/img/defaut_off.png\' width="50" height="50">',
-      '#_img_dark_on_#' => '<img class=\'img-responsive" src="plugins/inter2N/data/img/defaut_on.png\' width="50" height="50">',
+            '#_img_dark_on_#' => '<img class=\'img-responsive" src="plugins/inter2N/data/img/defaut_on.png\' width="50" height="50">',
 			'#_img_dark_off_#' => '<img class=\'img-responsive" src="plugins/inter2N/data/img/defaut_off.png\' width="50" height="50">'
 			)
 	);

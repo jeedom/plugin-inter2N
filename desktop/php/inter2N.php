@@ -150,7 +150,12 @@ foreach ($eqLogics as $eqLogic) {
                 <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="mastercodeSwitch4" placeholder="Codes de type Numerique. Séparés par virgule si plusieurs. (Max 8)"/>
             </div>
         </div>
-
+       <div class="form-group">
+            <label class="col-sm-3 control-label">{{Timeout des Requetes}}</label>
+            <div class="col-sm-3">
+                <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="timeout" placeholder="en secondes"/>
+            </div>
+        </div>
 
 
 
